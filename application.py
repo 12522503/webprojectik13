@@ -45,60 +45,15 @@ def index():
     """Show start screen for website"""
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "GET":
+<<<<<<< HEAD
 # <<<<<<< HEAD
         return render_template("index.html");
 # =======
 #         return render_template("index.html")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+=======
+<<<<<<< HEAD
+        return render_template("index.html")
+>>>>>>> b5118ac35e7c6c99cb9e103329821527ec198b02
 
 @app.route("/makeroom", methods=["GET", "POST"])
 def makeroom():
@@ -113,4 +68,27 @@ def makeroom():
         db.execute("INSERT INTO rooms (room, useramount, dates VALUES(:room, :useramount, :date)", room=roomname, useramount=0, date=datetime.datetime.now())
 
         return index()
+<<<<<<< HEAD
 
+=======
+=======
+        rooms = db.execute("SELECT room FROM rooms")
+        return render_template("index.html", rooms=rooms)
+
+
+    else:
+        # get var
+        username = request.form.get("username")
+        room = request.form.get("room")
+
+        # create table users
+        db.execute("INSERT INTO users (username, room) VALUES (:username, :room)",
+                    username=username, room=room)
+        db.execute("UPDATE room SET useramount +=1 WHERE room = :room",
+                    room=room)
+        return render_template("room.html")
+
+
+
+>>>>>>> 23123d9cae940d3ad85f5f99fb11b6f35261e99f
+>>>>>>> b5118ac35e7c6c99cb9e103329821527ec198b02
