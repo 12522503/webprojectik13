@@ -50,6 +50,7 @@ Er bestaan natuurlijk al verschillende andere websites waar je games kan spelen.
 returns error code
 def apology ():
     return ??
+
 takes questions out of db and randomizes them
 def get_random_question ():
     return ??
