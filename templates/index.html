@@ -5,6 +5,125 @@
 {% endblock %}
 
 {% block main %}
+    <div id="table" class="table-editable"
+        <span class="table-add glyphicon glyphicon-plus">
+            ::before
+        </span>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Room</th>
+                    <th id="occupants">Occupants</th>
+                    <th>Time passed</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td contenteditable="true">Kamer 1</td>
+                    <td id="occupants1">4</td>
+                    <td>2:55 min</td>
+                    <td>
+                        <span class="table-remove glyphicon glyphicon-remove">
+                            ::before
+                        </span>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">Kamer 2</td>
+                    <td id="occupants2">13</td>
+                    <td>6:38 min</td>
+                    <td>
+                        <span class="table-remove glyphicon glyphicon-remove">
+                            ::before
+                        </span>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">Kamer 3</td>
+                    <td id="occupants3">7</td>
+                    <td>0:23 min</td>
+                    <td>
+                        <span class="table-remove glyphicon glyphicon-remove">
+                            ::before
+                        </span>
+                    </td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <form action="/sell" method="post">
+        <div class="form-group">
+            <select class="form-control" name="symbol">
+                <option disabled selected value>Room</option>
+            {% for x in symbol %}
+                <option value="{{ x }}">{{ x }}</option>
+            {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text">
+        </div>
+        <button class="btn btn-primary" type="submit">Sell</button>
+    </form>
+    <script>
+var $TABLE = $('#table');
+var $BTN = $('#export-btn');
+var $EXPORT = $('#export');
 
+$('.table-add').click(function () {
+  var $clone = $TABLE.find('tr.hide').clone(true).removeClass('hide table-line');
+  $TABLE.find('table').append($clone);
+});
 
+$('.table-remove').click(function () {
+  $(this).parents('tr').detach();
+});
+
+$('.table-up').click(function () {
+  var $row = $(this).parents('tr');
+  if ($row.index() === 1) return; // Don't go above the header
+  $row.prev().before($row.get(0));
+});
+
+$('.table-down').click(function () {
+  var $row = $(this).parents('tr');
+  $row.next().after($row.get(0));
+});
+
+// A few jQuery helpers for exporting only
+jQuery.fn.pop = [].pop;
+jQuery.fn.shift = [].shift;
+
+$BTN.click(function () {
+  var $rows = $TABLE.find('tr:not(:hidden)');
+  var headers = [];
+  var data = [];
+
+  // Get the headers (add special header logic here)
+  $($rows.shift()).find('th:not(:empty)').each(function () {
+    headers.push($(this).text().toLowerCase());
+  });
+
+  // Turn all existing rows into a loopable array
+  $rows.each(function () {
+    var $td = $(this).find('td');
+    var h = {};
+
+    // Use the headers from earlier to name our hash keys
+    headers.forEach(function (header, i) {
+      h[header] = $td.eq(i).text();
+    });
+
+    data.push(h);
+  });
+
+  // Output the result
+  $EXPORT.text(JSON.stringify(data));
+});
+    </script>
 {% endblock %}

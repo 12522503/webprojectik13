@@ -39,4 +39,4 @@ def index():
     """Show start screen for website"""
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "GET":
-        return render_template("index.html")
+        return render_template("index.html");

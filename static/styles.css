@@ -1,3 +1,5 @@
+@import "compass/css3";
+
 nav .navbar-brand
 {
     /* size for brand */
@@ -44,4 +46,76 @@ main img
 {
     /* constrain images on small screens */
     max-width: 100%;
+}
+
+tr {
+    color: white;
+    height: 50px;
+    padding: 15px;
+}
+
+th {
+    height: 100px;
+    padding: 15px;
+}
+
+body{
+    background-color: #191970;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+#occupants1 {
+    color: rgb(0,100,0);
+
+}
+
+#occupants2 {
+    color: rgb(255,0,0);
+}
+
+#occupants3 {
+    color: rgb(255,69,0);
+}
+
+/*Dit is alles voor de interactieve tabel*/
+.table-editable {
+    position: relative;
+}
+
+.glyphicon {
+    font-size: 20px;
+}
+
+.table-remove {
+  color: #700;
+  cursor: pointer;
+}
+
+:hover {
+    color: #f00;
+}
+
+.table-up, .table-down {
+  color: #007;
+  cursor: pointer;
+}
+
+:hover {
+    color: #00f;
+}
+
+.table-add {
+  color: #070;
+  cursor: pointer;
+  position: absolute;
+  top: 8px;
+  right: 0;
+}
+
+:hover {
+    color: #0b0;
 }
