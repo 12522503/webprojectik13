@@ -45,10 +45,10 @@ def index():
     """Show start screen for website"""
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "GET":
-<<<<<<< HEAD
+# <<<<<<< HEAD
         return render_template("index.html");
-=======
-        return render_template("index.html")
+# =======
+#         return render_template("index.html")
 
 
 
@@ -113,4 +113,4 @@ def makeroom():
         db.execute("INSERT INTO rooms (room, useramount, dates VALUES(:room, :useramount, :date)", room=roomname, useramount=0, date=datetime.datetime.now())
 
         return index()
->>>>>>> abbf63c5ede2db91e0bc04346d50a60312798777
+
