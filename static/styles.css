@@ -48,6 +48,10 @@ main img
     max-width: 100%;
 }
 
+p{
+    color: white;
+}
+
 tr {
     color: white;
     height: 50px;
@@ -61,11 +65,6 @@ th {
 
 body{
     background-color: #191970;
-}
-
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
 }
 
 #occupants1 {
@@ -82,11 +81,16 @@ table {
 }
 
 /*Dit is alles voor de interactieve tabel*/
-.table-editable {
-    position: relative;
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
-.glyphicon {
+.table-editable {
+  position: relative;
+}
+
+.table-editable .glyphicon {
     font-size: 20px;
 }
 
@@ -95,18 +99,21 @@ table {
   cursor: pointer;
 }
 
-:hover {
-    color: #f00;
-}
+/*Specifieke hover werkt niet*/
+/*.table-remove :hover {*/
+/*    color: #f00;*/
+/*}*/
 
-.table-up, .table-down {
+.table-up,
+.table-down {
   color: #007;
   cursor: pointer;
 }
 
-:hover {
-    color: #00f;
-}
+/*Specifieke hover werkt niet*/
+/*.table-up, .table-down :hover {*/
+/*    color: #00f;*/
+/*}*/
 
 .table-add {
   color: #070;
@@ -116,6 +123,7 @@ table {
   right: 0;
 }
 
-:hover {
-    color: #0b0;
-}
+/*Specifieke hover werkt niet*/
+/*.table-add :hover {*/
+/*    color: #0b0;*/
+/*}*/

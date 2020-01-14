@@ -75,6 +75,9 @@ def makeroom():
 
         return index()
 
-
-
-
+@app.route("/thanks", methods=["GET"])
+def thanks():
+    if request.method == "GET":
+        return render_template("thanks.html")
+    else:
+        return index()
