@@ -8,6 +8,9 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
+# from helperes import update_database
+
+
 
 # Configure application
 app = Flask(__name__)
@@ -34,9 +37,80 @@ Session(app)
 db = SQL("sqlite:///webproject.db")
 
 
+# Put questions in database
+
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     """Show start screen for website"""
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "GET":
+<<<<<<< HEAD
         return render_template("index.html");
+=======
+        return render_template("index.html")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@app.route("/makeroom", methods=["GET", "POST"])
+def makeroom():
+    """Show start screen for website"""
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "GET":
+        return render_template("index.html")
+
+    # User reached route via POST
+    else:
+        roomname = request.form.get("room")
+        db.execute("INSERT INTO rooms (room, useramount, dates VALUES(:room, :useramount, :date)", room=roomname, useramount=0, date=datetime.datetime.now())
+
+        return index()
+>>>>>>> abbf63c5ede2db91e0bc04346d50a60312798777
