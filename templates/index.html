@@ -5,38 +5,6 @@
 {% endblock %}
 
 {% block main %}
-    <h1>
-        Your Personal Overview
-    </h1>
-    <h5>
-        Your Current Balance is {{f}}
-    </h5>
-    <h7>
-      <br>
 
-      <b>Grand Total is {{g}}</b>
-    </h7>
-    <br>
-    <h9>
-        <small><i>The total value of the shares you own plus your own money.</i></small>
-    </h9>
-    <br>
-    </br>
-    <table class="table table-striped" style="width:100%">
-      <tr>
-        <th>Symbol</th>
-        <th>Shares</th>
-        <th>Price</th>
-        <th>Totalprice</th>
-      </tr>
-    {% for x in e %}
-      <tr>
-        <td>{{ a[x] }}</td>
-        <td>{{ b[x] }}</td>
-        <td>{{ c[x] }}</td>
-        <td>{{ d[x] }}</td>
-      </tr>
-    {% endfor %}
-    </table>
 
 {% endblock %}
