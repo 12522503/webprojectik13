@@ -2,7 +2,6 @@
 Triviaspel
 - Jesse van der Sluis
 - Maxime van Munster
-- Mike Overmars
 - Rowan Duits
 ## Samenvatting
 We willen een online trivia spel maken, waarbij de politiek centraal staat. Het is een educatief spel zodat jongeren (ong. 15-25 jarigen) iets leren over de politiek, zodat zij deze informatie kunnen gebruiken bij het stemmen e.d. Hierbij kunnen meerdere spelers tegelijkertijd tegen elkaar spelen in een van te voren aangegeven/gekozen aantal rondes. Degene met de laagste score per ronde mag de categorie voor de volgende ronde kiezen. Per vraag zijn er punten te behalen/verliezen (afgestemd op moeilijkheidsgraad). Ook zijn er enkele jokers mogelijk om in te zetten. (bijvoorbeeld een verdubbelaar, dit is geen mvp)
