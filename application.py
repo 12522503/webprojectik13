@@ -8,7 +8,7 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helperes import update_database
+# from helperes import update_database
 
 
 
@@ -46,3 +46,67 @@ def index():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "GET":
         return render_template("index.html")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@app.route("/makeroom", methods=["GET", "POST"])
+def makeroom():
+    """Show start screen for website"""
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "GET":
+        return render_template("index.html")
+
+    # User reached route via POST
+    else:
+        roomname = request.form.get("room")
+        db.execute("INSERT INTO rooms (room, useramount, dates VALUES(:room, :useramount, :date)", room=roomname, useramount=0, date=datetime.datetime.now())
+
+        return index()

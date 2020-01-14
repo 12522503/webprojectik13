@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Kamer aanmaken
+{% endblock %}
+
+{% block main %}
+    <h1>
+        Maak een kamer aan
+    </h1>
+    <p>
+        Maak een kamer aan door de gewenste kamernaam hieronder in te vullen en op doorgaan te klikken.
+    </p>
+    <form action="/makeroom" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="room" placeholder="Kamernaam" type="text">
+        </div>
+        <button class="btn btn-primary" type="submit">Doorgaan</button>
+    </form>
+
+{% endblock %}
