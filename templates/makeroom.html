@@ -5,17 +5,23 @@
 {% endblock %}
 
 {% block main %}
+<div id="rcorners2">
+    <div class="blocktext">
     <h1>
         Maak een kamer aan
     </h1>
-    <p>
+    <a>
         Maak een kamer aan door de gewenste kamernaam hieronder in te vullen en op doorgaan te klikken.
-    </p>
+    </a>
+    <br>
+    <br>
     <form action="/makeroom" method="post">
         <div class="form-group">
             <input autocomplete="off" autofocus class="form-control" name="room" placeholder="Kamernaam" type="text">
         </div>
         <button class="btn btn-primary" type="submit">Doorgaan</button>
     </form>
+    </div>
+</div>
 
 {% endblock %}
