@@ -57,7 +57,7 @@ def index():
                     username=username, room=room)
         db.execute("UPDATE room SET useramount +=1 WHERE room = :room",
                     room=room)
-        return render_template("room.html")
+        return room()
 
 
 
@@ -74,6 +74,11 @@ def makeroom():
         db.execute("INSERT INTO rooms (room, useramount, dates VALUES(:room, :useramount, :date)", room=roomname, useramount=0, date=datetime.datetime.now())
 
         return index()
+
+@app.route("/room", methods=["GET", "POST"])
+def room():
+    return 0
+
 
 @app.route("/thanks", methods=["GET"])
 def thanks():
