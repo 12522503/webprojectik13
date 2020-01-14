@@ -45,37 +45,8 @@ def index():
     """Show start screen for website"""
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "GET":
-<<<<<<< HEAD
-# <<<<<<< HEAD
-        return render_template("index.html");
-# =======
-#         return render_template("index.html")
-=======
-<<<<<<< HEAD
-        return render_template("index.html")
->>>>>>> b5118ac35e7c6c99cb9e103329821527ec198b02
-
-@app.route("/makeroom", methods=["GET", "POST"])
-def makeroom():
-    """Show start screen for website"""
-    # User reached route via POST (as by submitting a form via POST)
-    if request.method == "GET":
-        return render_template("index.html")
-
-    # User reached route via POST
-    else:
-        roomname = request.form.get("room")
-        db.execute("INSERT INTO rooms (room, useramount, dates VALUES(:room, :useramount, :date)", room=roomname, useramount=0, date=datetime.datetime.now())
-
-        return index()
-<<<<<<< HEAD
-
-=======
-=======
         rooms = db.execute("SELECT room FROM rooms")
         return render_template("index.html", rooms=rooms)
-
-
     else:
         # get var
         username = request.form.get("username")
@@ -90,5 +61,20 @@ def makeroom():
 
 
 
->>>>>>> 23123d9cae940d3ad85f5f99fb11b6f35261e99f
->>>>>>> b5118ac35e7c6c99cb9e103329821527ec198b02
+@app.route("/makeroom", methods=["GET", "POST"])
+def makeroom():
+    """Show start screen for website"""
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "GET":
+        return render_template("index.html")
+
+    # User reached route via POST
+    else:
+        roomname = request.form.get("room")
+        db.execute("INSERT INTO rooms (room, useramount, dates VALUES(:room, :useramount, :date)", room=roomname, useramount=0, date=datetime.datetime.now())
+
+        return index()
+
+
+
+
