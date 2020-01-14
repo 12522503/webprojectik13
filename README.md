@@ -44,7 +44,7 @@ Er bestaan natuurlijk al verschillende andere websites waar je games kan spelen.
 - /end: Eindscherm met score en winnaar.
 
 ## Views
--
+- Zie plaatjes toegevoegd in map 'doc'.
 
 ## Models/helpers
 returns error code
@@ -64,7 +64,7 @@ def fifty ():
 
 when used points will double (even when wrong)
 def double ():
-    return??
+    return ??
 
 
 
