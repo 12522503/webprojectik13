@@ -75,8 +75,6 @@ def makeroom():
         db.execute("INSERT INTO rooms (room, useramount, dates) VALUES(:room, :useramount, :date)", room=roomname, useramount=0, date=datetime.datetime.now())
         return index()
 
-        return index()
-
 
 @app.route("/room", methods=["GET", "POST"])
 def room():
