@@ -73,6 +73,7 @@ def makeroom():
         roomname = request.form.get("room")
         db.execute("INSERT INTO rooms (room, useramount, dates VALUES(:room, :useramount, :date)", room=roomname, useramount=0, date=datetime.datetime.now())
 
+# <<<<<<< HEAD
         return index()
 
 @app.route("/thanks", methods=["GET"])
@@ -82,3 +83,6 @@ def thanks():
     else:
         return index()
 
+# =======
+        # return index()
+# >>>>>>> 2e288779ac60feb2f7ecae38a218a2bf7a9dbedf
