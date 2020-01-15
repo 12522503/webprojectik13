@@ -1,6 +1,7 @@
 import os
 import datetime
 
+from helpers import apology
 from cs50 import SQL
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 from flask_session import Session
@@ -51,6 +52,16 @@ def index():
         # get var
         username = request.form.get("username")
         room = request.form.get("room")
+
+        if not username:
+            return apology("Voer een gebruikersnaam in", 400)
+
+        if not room:
+            return apology("Voer een room in", 400)
+
+        usernames = db.execute("SELECT * FROM users WHERE username = :username", username=username)
+        if usernames == 1:
+            return apology("Gebruikersnaam is al gebruikt")
 
         # create table users
         db.execute("INSERT INTO users (username, room) VALUES (:username, :room)",
