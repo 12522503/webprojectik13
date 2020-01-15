@@ -55,6 +55,7 @@ def index():
         # create table users
         db.execute("INSERT INTO users (username, room) VALUES (:username, :room)",
                     username=username, room=room)
+        # update useramount in that room
         db.execute("UPDATE room SET useramount +=1 WHERE room = :room",
                     room=room)
         return room()
@@ -73,7 +74,7 @@ def makeroom():
         roomname = request.form.get("room")
         db.execute("INSERT INTO rooms (room, useramount, dates VALUES(:room, :useramount, :date)", room=roomname, useramount=0, date=datetime.datetime.now())
 
-        return index()
+
 
 @app.route("/room", methods=["GET", "POST"])
 def room():
@@ -86,3 +87,4 @@ def thanks():
         return render_template("thanks.html")
     else:
         return index()
+
