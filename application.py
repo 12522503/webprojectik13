@@ -78,6 +78,10 @@ def makeroom():
 
 @app.route("/room", methods=["GET", "POST"])
 def room():
+    if request.method == "GET"
+        return room():
+    else:
+        return render_template("game.html")
     return 0
 
 @app.route("/thanks", methods=["GET"])
