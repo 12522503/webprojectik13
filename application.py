@@ -58,7 +58,8 @@ def index():
         # update useramount in that room
         db.execute("UPDATE room SET useramount +=1 WHERE room = :room",
                     room=room)
-        return render_template("room.html")
+        return room()
+
 
 
 @app.route("/makeroom", methods=["GET", "POST"])
@@ -66,15 +67,19 @@ def makeroom():
     """Show start screen for website"""
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "GET":
-        return render_template("index.html")
+        return render_template("makeroom.html")
 
     # User reached route via POST
     else:
         roomname = request.form.get("room")
         db.execute("INSERT INTO rooms (room, useramount, dates VALUES(:room, :useramount, :date)", room=roomname, useramount=0, date=datetime.datetime.now())
 
-# <<<<<<< HEAD
         return index()
+
+
+@app.route("/room", methods=["GET", "POST"])
+def room():
+    return 0
 
 @app.route("/thanks", methods=["GET"])
 def thanks():
@@ -82,7 +87,3 @@ def thanks():
         return render_template("thanks.html")
     else:
         return index()
-
-# =======
-        # return index()
-# >>>>>>> 2e288779ac60feb2f7ecae38a218a2bf7a9dbedf
