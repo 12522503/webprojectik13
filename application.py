@@ -74,6 +74,7 @@ def makeroom():
         roomname = request.form.get("room")
         db.execute("INSERT INTO rooms (room, useramount, dates VALUES(:room, :useramount, :date)", room=roomname, useramount=0, date=datetime.datetime.now())
 
+        return index()
 
 
 @app.route("/room", methods=["GET", "POST"])
@@ -84,11 +85,9 @@ def room():
         return render_template("game.html")
     return 0
 
-
 @app.route("/thanks", methods=["GET"])
 def thanks():
     if request.method == "GET":
         return render_template("thanks.html")
     else:
         return index()
-

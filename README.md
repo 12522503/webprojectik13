@@ -67,9 +67,6 @@ when used points will double (even when wrong)
 def double ():
     return ??
 
-
-
-
 ## Plugin/Frameworks
 - Er zal gebruikt gemaakt worden van verschillende frameworks als bootstrap. Wanneer de front end van de site duidelijk wordt zullen we belsuit wel vormgeving deze zal krijgen.
 - Als plugin zal er Flask-DebugToolbar gebruikt worden https://flask-debugtoolbar.readthedocs.io/en/latest/
