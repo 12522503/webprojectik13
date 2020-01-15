@@ -77,9 +77,19 @@
                     <div class="dropdown show">
                         <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Kies een speelkamer</a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            <a class="dropdown-item" href="#">Action</a>
+                        <div name="room" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            {%for room in rooms%}
+
+
+                            <a value ="{{room}}"class="dropdown-item">{{ room }}</a>
+
+                            {% endfor %}
                         </div>
+
+                        <!--    {% for room in rooms %}-->
+                        <!--    <option value="{{stock}}">{{ room }}</option>-->
+                        <!--    {% endfor %}-->
+                        <!--</select>-->
                     </div>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <button type="button" class="btn btn-secondary">Start spel</button>

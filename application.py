@@ -46,7 +46,8 @@ def index():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "GET":
         rooms = db.execute("SELECT room FROM rooms")
-        return render_template("index.html", rooms=rooms)
+        roomnames = [item["room"] for item in rooms]
+        return render_template("index.html", rooms=roomnames)
     else:
         # get var
         username = request.form.get("username")
