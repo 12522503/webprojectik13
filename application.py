@@ -1,5 +1,6 @@
 import os
 import datetime
+from datetime import date
 
 from helpers import apology
 from cs50 import SQL
@@ -8,9 +9,6 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
-
-# from helperes import update_database
-
 
 
 # Configure application
@@ -38,7 +36,6 @@ Session(app)
 db = SQL("sqlite:///webproject.db")
 
 
-# Put questions in database
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -46,19 +43,28 @@ def index():
     """Show start screen for website"""
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "GET":
-        rooms = db.execute("SELECT room FROM rooms")
-        roomnames = [item["room"] for item in rooms]
-        return render_template("index.html", rooms=roomnames)
+        roominfo = db.execute("SELECT * FROM rooms")
+        print(roominfo)
+        roomnames = [item["room"] for item in roominfo]
+        print(roomnames)
+        return render_template("index.html", rooms=roomnames, info=roominfo)
     else:
         # get var
         username = request.form.get("username")
         room = request.form.get("room")
+
+        print(username, room)
 
         if not username:
             return apology("Voer een gebruikersnaam in", 400)
 
         if not room:
             return apology("Voer een room in", 400)
+
+        if room == "standard":
+            return apology("Kies een room", 400)
+
+
 
         usernames = db.execute("SELECT * FROM users WHERE username = :username", username=username)
         if usernames == 1:
@@ -68,9 +74,9 @@ def index():
         db.execute("INSERT INTO users (username, room) VALUES (:username, :room)",
                     username=username, room=room)
         # update useramount in that room
-        db.execute("UPDATE room SET useramount +=1 WHERE room = :room",
-                    room=room)
-        return room()
+        db.execute("UPDATE rooms SET useramount = useramount + 1 WHERE room= :roomname",
+                    roomname=room)
+        return inroom()
 
 
 
@@ -84,16 +90,16 @@ def makeroom():
     # User reached route via POST
     else:
         roomname = request.form.get("room")
-        db.execute("INSERT INTO rooms (room, useramount, dates) VALUES(:room, :useramount, :date)", room=roomname, useramount=0, date=datetime.datetime.now())
+        db.execute("INSERT INTO rooms (room, useramount, dates) VALUES(:room, :useramount, :date)", room=roomname, useramount=0, date=date.today())
         return render_template("index.html")
 
 
 @app.route("/room", methods=["GET", "POST"])
-def room():
+def inroom():
     if request.method == "GET":
-        return room()
+        return render_template("room.html")
     else:
-        return render_template("game.html")
+        return render_template("room.html")
     return 0
 
 @app.route("/thanks", methods=["GET"])

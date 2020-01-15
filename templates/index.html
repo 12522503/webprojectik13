@@ -8,58 +8,25 @@
 
     <div class="first-column">
         <div id="rcorners1">
-
-
-        <div id="table" class="table-editable" span class="table-add glyphicon glyphicon-plus"><p><b>Kamers in gebruik</b></p></span>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Kamer</th>
-                        <th id="occupants">Gebruikers</th>
-                        <th>Tijd verstreken</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="hide">
-                        <td contenteditable="true">Kamer 1</td>
-                        <td id="occupants1">4</td>
-                        <td>2:55 min</td>
-                        <td>
-                            <span class="table-remove glyphicon glyphicon-remove">
-                                X
-                            </span>
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr class="hide">
-                        <td contenteditable="true">Kamer 2</td>
-                        <td id="occupants2">13</td>
-                        <td>6:38 min</td>
-                        <td>
-                            <span class="table-remove glyphicon glyphicon-remove">
-                                X
-                            </span>
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr class="hide">
-                        <td contenteditable="true">Kamer 3</td>
-                        <td id="occupants3">7</td>
-                        <td>0:23 min</td>
-                        <td>
-                            <span class="table-remove glyphicon glyphicon-remove">
-                                X
-                            </span>
-                        </td>
-                        <td></td>
-                    </tr>
-                </tbody>
+            <img src="https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwiI2bjY8IXnAhXCPOwKHWquDMcQjRx6BAgBEAQ&url=https%3A%2F%2Fwww.ad.nl%2Fpolitiek%2Fwie-of-wat-is-toch-die-uil-van-minerva~ad870870%2F&psig=AOvVaw27JfOAsZz6EOVGQiZof3gO&ust=1579187141794700" alt="Baudet en z'n huisdier">
+            <b><h5>Kamers in gebruik</h5></b><br>
+            <table class="table table-striped" style="width:100%">
+                <tr>
+                    <th>Kamer</th>
+                    <th>Gebruikers</th>
+                    <th>Datum</th>
+                </tr>
+                    {% for item in info %}
+                <tr>
+                    <td>{{ item.room }}</td>
+                    <td>{{ item.useramount}}</td>
+                    <td>{{ item.dates }}</td>
+                </tr>
+                    {% endfor %}
             </table>
 
+
         </div>
-    </div>
     </div>
     <div class="second-column">
         <div id="rcorners2">
@@ -71,28 +38,19 @@
                 <br>
                 <br>
                 <b><h4>Spel aanmaken</h4></b>
-                Eén persoon dient <a href="/makeroom">een kamer aan te maken</a> <br>De overige personen kiezen een gebruikersnaam en kiezen de kamer.
-                <form class="form-inline" action="/index" method="POST">
+                Eén persoon dient <a href="/makeroom">een kamer aan te maken</a> <br>De overige personen kiezen een gebruikersnaam en de kamer hieronder.
+                <form class="form-inline" action="/" method="POST">
                     <input type="text" class="form-control" id="username" placeholder="Gebruikersnaam" name="username"><br>
-                    <div class="dropdown show">
-                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Kies een speelkamer</a>
-                        <div name="room" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            {%for room in rooms%}
 
+                        <select name="room" class="button1">
+                            <option value="standard">Kies een speelkamer</option>
+                            {% for room in rooms %}
 
-                            <a value ="{{room}}"class="dropdown-item">{{ room }}</a>
-
+                            <option value="{{ room }}">{{ room }}</option>
                             {% endfor %}
-                        </div>
-
-                        <!--    {% for room in rooms %}-->
-                        <!--    <option value="{{stock}}">{{ room }}</option>-->
-                        <!--    {% endfor %}-->
-                        <!--</select>-->
-                    </div>
+                        </select>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button type="button" class="btn btn-secondary">Start spel</button>
+                    <button class="button2" type="submit">Ga verder</button>
                 </form>
             </div>
         </div>
