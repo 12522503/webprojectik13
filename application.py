@@ -58,7 +58,7 @@ def index():
         # update useramount in that room
         db.execute("UPDATE room SET useramount +=1 WHERE room = :room",
                     room=room)
-        return render_template("room.html")
+        return room()
 
 
 
