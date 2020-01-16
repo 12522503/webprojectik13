@@ -58,6 +58,10 @@ tr {
     padding: 15px;
 }
 
+.formsmall {
+    width: 100px;
+}
+
 th {
     height: 100px;
     padding: 15px;
@@ -65,75 +69,13 @@ th {
 
 body{
     /*background-color: #191970;*/
-    background-image: url("tweede-kamer.jpg");
+    background-image: url("tweede-kamer-min.jpg");
     background-repeat: repeat-x;
     background-size: cover;
 }
 
-#occupants1 {
-    color: rgb(0,100,0);
 
-}
 
-#occupants2 {
-    color: rgb(255,0,0);
-}
-
-#occupants3 {
-    color: rgb(255,69,0);
-}
-
-.blocktext {
-    color: black;
-}
-
-/*Dit is alles voor de interactieve tabel*/
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-
-.table-editable {
-  position: relative;
-}
-
-.table-editable .glyphicon {
-    font-size: 20px;
-}
-
-.table-remove {
-  color: #700;
-  cursor: pointer;
-}
-
-/*Specifieke hover werkt niet*/
-/*.table-remove :hover {*/
-/*    color: #f00;*/
-/*}*/
-
-.table-up,
-.table-down {
-  color: #007;
-  cursor: pointer;
-}
-
-/*Specifieke hover werkt niet*/
-/*.table-up, .table-down :hover {*/
-/*    color: #00f;*/
-/*}*/
-
-.table-add {
-  color: #070;
-  cursor: pointer;
-  position: absolute;
-  top: 8px;
-  right: 0;
-}
-
-/*Specifieke hover werkt niet*/
-/*.table-add :hover {*/
-/*    color: #0b0;*/
-/*}*/
 
 .cblock {
     border-collapse:separate;
@@ -256,4 +198,26 @@ table {
     width: auto;
     height: 40px;
     border-radius: 5px;
+}
+
+#page-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+#content-wrap {
+  padding-bottom: 2.5rem;    /* Footer height */
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 150px;
+  background-color: white;
+  color: white;
+  border-color: grey;
+  border-radius: 2px;
+  text-align: center;
 }

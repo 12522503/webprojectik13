@@ -37,16 +37,13 @@ db = SQL("sqlite:///webproject.db")
 
 
 
-
 @app.route("/", methods=["GET", "POST"])
 def index():
     """Show start screen for website"""
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "GET":
         roominfo = db.execute("SELECT * FROM rooms")
-        print(roominfo)
         roomnames = [item["room"] for item in roominfo]
-        print(roomnames)
         return render_template("index.html", rooms=roomnames, info=roominfo)
     else:
         # get var
@@ -89,18 +86,56 @@ def makeroom():
 
     # User reached route via POST
     else:
+        # Get all variables
         roomname = request.form.get("room")
-        db.execute("INSERT INTO rooms (room, useramount, dates) VALUES(:room, :useramount, :date)", room=roomname, useramount=0, date=date.today())
-        return render_template("index.html")
+        questions = request.form.get("questions")
+        username = request.form.get("username")
+
+        # Check if valid answer
+        if not roomname and not username:
+            return apology("Vul alles in om verder te gaan.")
+        if not roomname:
+            return apology("Vul een kamernaam in.")
+
+        if questions == "vragen":
+            return apology("Kies het aantal vragen.")
+
+        if not username:
+            return apology("Vul een gebruikersnaam in.")
+
+        # Insert room into rooms table
+        db.execute("INSERT INTO rooms (room, useramount, dates, questions) VALUES(:room, :useramount, :date , :q)",
+                    room=roomname, useramount=1, date=date.today(), q=int(questions))
+
+        # Insert user into users table
+        db.execute("INSERT INTO users (username, room, fifty, double, joker, score, ready) VALUES(:name, :room, :f, :d, :j, :s, :r)",
+                    name=username, room=roomname, f=1, d=1, j=1, s=1, r=0)
+        return inroom(True)
 
 
 @app.route("/room", methods=["GET", "POST"])
-def inroom():
-    if request.method == "GET":
-        return render_template("room.html")
+def inroom(host=False):
+    # Check if user is host of game
+    if host == True:
+        host = "yes"
+        message = "Jij bent momenteel host van deze kamer. \n Jij kiest dus wanneer het spel begint."
+        title = "Wachten op medespelers"
     else:
-        return render_template("room.html")
-    return 0
+        host = "no"
+        message = "De host bepaald wanneer het spel start. Wanneer de host het spel start ga je automatisch naar het spel."
+        title = "Wachten totdat de host het spel start."
+    username = request.form.get("username")
+    room = (db.execute("SELECT room FROM users WHERE username=:user", user=username))[0]["room"]
+    print("USERNAME REQUEST: ", username)
+    print("ROOM REQUEST: ", room)
+
+    if request.method == "GET":
+        print("METHOD GET")
+        return render_template("room.html", user=username, room=room, message=message, top=title, host=host)
+    else:
+        print("METHOD POST")
+        return render_template("room.html", user=username, room=room, message=message, top=title, host=host)
+
 
 @app.route("/thanks", methods=["GET"])
 def thanks():

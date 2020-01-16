@@ -1,9 +1,24 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Index
+    Kamer
 {% endblock %}
 
 {% block main %}
-    Nothing to show
+<div id="rcorners3">
+    <br>
+    <h1>{{ top }}</h1>
+    <a>Je speelt onder de naam </a>
+    <b><font color="blue"> {{ user }} </font></b>
+    <a> in de kamer</a>
+    <b><font color="blue">{{ room }}</font><br>
+    {{ message }}<br><br></b>
+    {% if host == "yes" %}
+    <form name="startgame"></form>
+        <button class="btn btn-primary" type="submit" href="/">Spel starten</button><br><br>
+    </form>
+    {% endif %}
+
+
+</div>
 {% endblock %}

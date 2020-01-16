@@ -6,22 +6,28 @@
 
 {% block main %}
 <div id="rcorners3">
+    <br>
     <div class="blocktext">
     <h1>
         Maak een kamer aan
     </h1>
     <a>
-        Maak een kamer aan en kies een gebruikersnaam om een spelkamer toe te voegen. Klik daarna op enter om verder te gaan.
+        Maak een kamer aan en kies een gebruikersnaam om een spelkamer toe te voegen.<br> Kies vervolgens het aantal vragen en klik daarna op "aanmaken" om verder te gaan.
     </a>
     <br>
     <br>
     <form action="/makeroom" method="post">
-        <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" name="room" placeholder="Kamernaam" type="text" >
-        </div>
-        <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Gebruikersnaam" type="text">
-        </div>
+        <input autocomplete="off"  name="room" placeholder="Kamernaam" type="text">
+
+
+        <input autocomplete="off"  name="username" placeholder="Gebruikersnaam" type="text">
+        <select name="questions" class="button1">
+            <option value="vragen">aantal vragen</option>
+            {% for x in range(11) if x > 0 %}
+            <option value="{{x}}">{{x}}</option>
+            {% endfor %}
+        </select>
+
         <button class="btn btn-primary" type="submit" href="/">Aanmaken</button><br><br>
     </form>
     </div>

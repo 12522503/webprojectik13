@@ -8,22 +8,22 @@
 
     <div class="first-column">
         <div id="rcorners1">
-            <!--<img src="https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwiI2bjY8IXnAhXCPOwKHWquDMcQjRx6BAgBEAQ&url=https%3A%2F%2Fwww.ad.nl%2Fpolitiek%2Fwie-of-wat-is-toch-die-uil-van-minerva~ad870870%2F&psig=AOvVaw27JfOAsZz6EOVGQiZof3gO&ust=1579187141794700" alt="Baudet en z'n huisdier">-->
-            <b><h5>Kamers in gebruik</h5></b><br>
-            <table class="table table-striped" style="width:100%">
-                <tr>
-                    <th>Kamer</th>
-                    <th>Gebruikers</th>
-                    <th>Datum</th>
-                </tr>
-                    {% for item in info %}
-                <tr>
-                    <td>{{ item.room }}</td>
-                    <td>{{ item.useramount}}</td>
-                    <td>{{ item.dates }}</td>
-                </tr>
-                    {% endfor %}
-            </table>
+            <img src="static/minerva.jpg">
+
+            <!--<table class="table table-striped" style="width:100%">-->
+            <!--    <tr>-->
+            <!--        <th>Kamer</th>-->
+            <!--        <th>Gebruikers</th>-->
+            <!--        <th>Datum</th>-->
+            <!--    </tr>-->
+            <!--        {% for item in info %}-->
+            <!--    <tr>-->
+            <!--        <td>{{ item.room }}</td>-->
+            <!--        <td>{{ item.useramount}}</td>-->
+            <!--        <td>{{ item.dates }}</td>-->
+            <!--    </tr>-->
+            <!--        {% endfor %}-->
+            <!--</table>-->
 
 
         </div>
@@ -38,8 +38,9 @@
                 <br>
                 <br>
                 <b><h4>Spel aanmaken</h4></b>
-                Eén persoon dient <a href="/makeroom">een kamer aan te maken</a> <br>De overige personen kiezen een gebruikersnaam en de kamer hieronder.
+                Eén persoon dient <a href="/makeroom">een kamer aan te maken</a> <br>De overige personen kiezen een gebruikersnaam en de kamer hieronder.<br><br><br>
                 <form class="form-inline" action="/" method="POST">
+                    &nbsp;&nbsp;&nbsp;
                     <input type="text" class="form-control" id="username" placeholder="Gebruikersnaam" name="username"><br>
 
                         <select name="room" class="button1">
@@ -51,69 +52,8 @@
                         </select>
                     &nbsp;&nbsp;&nbsp;
                     <button class="button2" type="submit">OK</button>
-                </form>
+                </form><br><br>
             </div>
         </div>
     </div>
-
-
-
-
-
-    <script>
-var $TABLE = $('#table');
-var $BTN = $('#export-btn');
-var $EXPORT = $('#export');
-
-$('.table-add').click(function () {
-  var $clone = $TABLE.find('tr.hide').clone(true).removeClass('hide table-line');
-  $TABLE.find('table').append($clone);
-});
-
-$('.table-remove').click(function () {
-  $(this).parents('tr').detach();
-});
-
-$('.table-up').click(function () {
-  var $row = $(this).parents('tr');
-  if ($row.index() === 1) return; // Don't go above the header
-  $row.prev().before($row.get(0));
-});
-
-$('.table-down').click(function () {
-  var $row = $(this).parents('tr');
-  $row.next().after($row.get(0));
-});
-
-// A few jQuery helpers for exporting only
-jQuery.fn.pop = [].pop;
-jQuery.fn.shift = [].shift;
-
-$BTN.click(function () {
-  var $rows = $TABLE.find('tr:not(:hidden)');
-  var headers = [];
-  var data = [];
-
-  // Get the headers (add special header logic here)
-  $($rows.shift()).find('th:not(:empty)').each(function () {
-    headers.push($(this).text().toLowerCase());
-  });
-
-  // Turn all existing rows into a loopable array
-  $rows.each(function () {
-    var $td = $(this).find('td');
-    var h = {};
-
-    // Use the headers from earlier to name our hash keys
-    headers.forEach(function (header, i) {
-      h[header] = $td.eq(i).text();
-    });
-
-    data.push(h);
-  });
-
-  // Output the result
-  $EXPORT.text(JSON.stringify(data));
-});
-    </script>
 {% endblock %}
