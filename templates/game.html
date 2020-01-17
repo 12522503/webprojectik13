@@ -1,15 +1,69 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Kamer
+    Index
 {% endblock %}
 
 {% block main %}
+<script>
+     // When page fully loaded
+    // jQuery(document).ready(function(){
+    //     get_score();
 
-<div id="rcorners3">
-    <h2>
-        Game
-    </h2>
+    // });
 
-</div>
+// Get scores from JSON
+    function get_scores()
+    {
+        url= "/getscores?room=" + '{{ room }}';
+        $.getJSON(url, function(data) {
+            var response = JSON.stringify(data);
+            return response;
+        });
+    }
+    var scores = get_scores();
+
+
+    // Update score (insert user and +/- integer)
+    function update_score(user, update)
+    {
+        url = "/updatescore?user="+user+"?update="+update;
+        alert(url);
+        $.get(url, function(data) {
+            if (data == true)
+            {}
+        });
+    }
+    update_score('{{ user }}', '{{ room }}');
+
+</script>
+    <div class="first-column">
+        <div id="rcorners1">
+            <large><font align="left" color="blue">Jij: {{ user }}</font><br></large>
+            <h5>Kamer: {{ room }}</h5>
+            <hr>
+            <table class="table table-striped" style="width:100%">
+              <tr>
+                <th>Speler</th>
+                <th>Score</th>
+              </tr>
+                {% for player in scores %}
+              <tr>
+                <td>{{ scores.user }}</td>
+                <td>{{ scores.score}}</td>
+              </tr>
+                {% endfor %}
+            </table>
+
+
+
+        </div>
+    </div>
+    <div class="second-column">
+        <div id="rcorners2">
+            <div class="blocktext">
+                TEST
+            </div>
+        </div>
+    </div>
 {% endblock %}

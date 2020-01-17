@@ -129,8 +129,8 @@ def inroom(host=False):
         warning = "Wanneer jij op SPEL STARTEN klikt wordt de kamer afgesloten en kan er dus niemand meer deelnemen."
     else:
         host = "no"
-        message = "De host bepaald wanneer het spel start. Wanneer de host het spel start wordt je automatisch doorgeleid."
         title = "Wachten totdat de host het spel start..."
+        message = "Momenteel is het mogelijk voor andere spelers om de kamer te betreden. Wanneer de host het spel start wordt de kamer gesloten."
         warning = "Nadat de host op SPEL STARTEN heeft gedrukt kan dit maximaal 5 seconden duren."
     username = request.form.get("username")
     room = (db.execute("SELECT room FROM users WHERE username=:user", user=username))[0]["room"]
@@ -168,7 +168,9 @@ def check():
 def game():
     print("USERNAME GAME REQUEST: ", session["user"])
     print("ROOM GAME REQUEST: ", session["room"])
-    return render_template("game.html")
+    return render_template("game.html", user=session["user"], room=session["room"])
+
+
 
 @app.route("/thanks", methods=["GET"])
 def thanks():
@@ -176,3 +178,23 @@ def thanks():
         return render_template("thanks.html")
     else:
         return index()
+
+def errorhandler(e):
+    """Handle error"""
+    if not isinstance(e, HTTPException):
+        e = InternalServerError()
+    return apology(e.name, e.code)
+
+
+@app.route("/getscores")
+def scores():
+    info = db.execute("SELECT username, score FROM users WHERE room=:room", room=request.args.get("room"))
+    return jsonify(info)
+
+
+@app.route("/updatescore")
+def updatescore():
+    user = request.args.get("user")
+    update = int(request.args.get("update"))
+    db.execute("UPDATE users SET score = score + :update WHERE username=:user", update=update, user=user)
+    return False
