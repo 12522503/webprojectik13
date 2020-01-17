@@ -42,7 +42,9 @@ def index():
     """Show start screen for website"""
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "GET":
-        roominfo = db.execute("SELECT * FROM rooms")
+
+        # Select roomgames which haven't been started yet
+        roominfo = db.execute("SELECT * FROM rooms WHERE ready=:status", status=0)
         roomnames = [item["room"] for item in roominfo]
         return render_template("index.html", rooms=roomnames, info=roominfo)
     else:
@@ -50,7 +52,8 @@ def index():
         username = request.form.get("username")
         room = request.form.get("room")
 
-        print(username, room)
+        session["user"] = username
+        session["room"] = room
 
         if not username:
             return apology("Voer een gebruikersnaam in", 400)
@@ -91,6 +94,9 @@ def makeroom():
         questions = request.form.get("questions")
         username = request.form.get("username")
 
+        session["user"] = username
+        session["room"] = roomname
+
         # Check if valid answer
         if not roomname and not username:
             return apology("Vul alles in om verder te gaan.")
@@ -115,15 +121,17 @@ def makeroom():
 
 @app.route("/room", methods=["GET", "POST"])
 def inroom(host=False):
-    # Check if user is host of game
+    # Check if user is host of game and pass message
     if host == True:
         host = "yes"
         message = "Jij bent momenteel host van deze kamer. \n Jij kiest dus wanneer het spel begint."
-        title = "Wachten op medespelers"
+        title = "Spel starten..."
+        warning = "Wanneer jij op SPEL STARTEN klikt wordt de kamer afgesloten en kan er dus niemand meer deelnemen."
     else:
         host = "no"
-        message = "De host bepaald wanneer het spel start. Wanneer de host het spel start ga je automatisch naar het spel."
-        title = "Wachten totdat de host het spel start."
+        message = "De host bepaald wanneer het spel start. Wanneer de host het spel start wordt je automatisch doorgeleid."
+        title = "Wachten totdat de host het spel start..."
+        warning = "Nadat de host op SPEL STARTEN heeft gedrukt kan dit maximaal 5 seconden duren."
     username = request.form.get("username")
     room = (db.execute("SELECT room FROM users WHERE username=:user", user=username))[0]["room"]
     print("USERNAME REQUEST: ", username)
@@ -131,11 +139,36 @@ def inroom(host=False):
 
     if request.method == "GET":
         print("METHOD GET")
-        return render_template("room.html", user=username, room=room, message=message, top=title, host=host)
+        return render_template("room.html", user=username, room=room, message=message, top=title, host=host, w=warning)
     else:
         print("METHOD POST")
-        return render_template("room.html", user=username, room=room, message=message, top=title, host=host)
 
+        return render_template("room.html", user=username, room=room, message=message, top=title, host=host, w=warning)
+
+@app.route("/setready")
+def setready():
+    room = request.args.get("room")
+    db.execute("UPDATE rooms SET ready=:status WHERE room=:room", status=1, room=room)
+    return jsonify(True)
+
+
+@app.route("/check")
+def check():
+    info = db.execute("SELECT * FROM rooms WHERE room=:room", room=request.args.get("room"))
+    ready = info[0]["ready"]
+
+    if ready == 0:
+        return jsonify(False)
+    else:
+        return jsonify(True)
+
+
+
+@app.route("/game", methods=["GET", "POST"])
+def game():
+    print("USERNAME GAME REQUEST: ", session["user"])
+    print("ROOM GAME REQUEST: ", session["room"])
+    return render_template("game.html")
 
 @app.route("/thanks", methods=["GET"])
 def thanks():
