@@ -1,6 +1,7 @@
 import os
 import datetime
 from datetime import date
+import json
 
 from helpers import apology
 from cs50 import SQL
@@ -134,15 +135,10 @@ def inroom(host=False):
         warning = "Nadat de host op SPEL STARTEN heeft gedrukt kan dit maximaal 5 seconden duren."
     username = request.form.get("username")
     room = (db.execute("SELECT room FROM users WHERE username=:user", user=username))[0]["room"]
-    print("USERNAME REQUEST: ", username)
-    print("ROOM REQUEST: ", room)
 
     if request.method == "GET":
-        print("METHOD GET")
         return render_template("room.html", user=username, room=room, message=message, top=title, host=host, w=warning)
     else:
-        print("METHOD POST")
-
         return render_template("room.html", user=username, room=room, message=message, top=title, host=host, w=warning)
 
 @app.route("/setready")
@@ -151,7 +147,7 @@ def setready():
     db.execute("UPDATE rooms SET ready=:status WHERE room=:room", status=1, room=room)
     return jsonify(True)
 
-
+# Check if game is ready to start (selected by host)
 @app.route("/check")
 def check():
     info = db.execute("SELECT * FROM rooms WHERE room=:room", room=request.args.get("room"))
@@ -166,9 +162,26 @@ def check():
 
 @app.route("/game", methods=["GET", "POST"])
 def game():
-    print("USERNAME GAME REQUEST: ", session["user"])
-    print("ROOM GAME REQUEST: ", session["room"])
-    return render_template("game.html", user=session["user"], room=session["room"])
+    # Get information of room
+    room=session["room"]
+    questionamount = (db.execute("SELECT questions FROM rooms WHERE room=:room", room=room))[0]["questions"]
+
+    # Get questions
+    questiondata = db.execute("SELECT * FROM questions")
+    questions = []
+    for line in questiondata:
+        qdict = dict()
+        qdict["question"] = line["question"]
+        qdict["category"] = line["category"]
+        qdict["correct"] = line["correctanswer"]
+        qdict["answer2"] = line["answer2"]
+        qdict["answer3"] = line["answer3"]
+        qdict["answer4"] = line["answer4"]
+        qdict["pointscorrect"] = line["pointscorrect"]
+        qdict["pointsincorrect"] = line["pointsincorrect"]
+        questions.append(qdict)
+
+    return render_template("game.html", user=session["user"], room=session["room"], questions=questions, amount=questionamount)
 
 
 

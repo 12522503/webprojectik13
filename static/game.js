@@ -1,58 +1,4 @@
-{% extends "layout.html" %}
-
-{% block title %}
-    Index
-{% endblock %}
-
-{% block main %}
-
-    <div class="first-column">
-        <div id="rcorners1">
-            <large><font align="left" color="blue">Jij: {{ user }}</font><br></large>
-            <h5>Kamer: {{ room }}</h5>
-            <hr>
-            <table class="table table-striped" style="width:100%">
-              <tr>
-                <th>Speler</th>
-                <th>Score</th>
-              </tr>
-                {% for player in scores %}
-              <tr>
-                <td>{{ scores.user }}</td>
-                <td>{{ scores.score}}</td>
-              </tr>
-                {% endfor %}
-            </table>
-
-
-
-        </div>
-    </div>
-    <div class="second-column">
-        <div id="rcorners2">
-            <div id="quiz" style="display: none">
-                <h2 id="question"></h2>
-                <small>Categorie: </small>
-                <h5 id="category"></h5><hr>
-                <div id="choices">
-                    <div class="choice" id="A" onclick="checkAnswer('A')"></div><br>
-                    <div class="choice" id="B" onclick="checkAnswer('B')"></div><br>
-                    <div class="choice" id="C" onclick="checkAnswer('C')"></div><br>
-                    <div class="choice" id="D" onclick="checkAnswer('D')"></div><br>
-                </div>
-                <div id="timer">
-                    <div id="counter"></div>
-                    <div id="btimeGauge"></div>
-                    <div id="timeGauge"></div>
-                </div>
-                <div id="progress"></div>
-            </div>
-            <div id="scoreContainer" style="display: none"></div>
-            </div>
-        </div>
-    </div>
-    <script>
-            //   When page fully loaded
+    //   When page fully loaded
     jQuery(document).ready(function(){
         alert("test");
         startQuiz();
@@ -87,19 +33,17 @@
 
 const quiz = document.getElementById("quiz");
 const question = document.getElementById("question");
-const category = document.getElementById("category")
 const qImg = document.getElementById("qImg");
 const choiceA = document.getElementById("A");
 const choiceB = document.getElementById("B");
 const choiceC = document.getElementById("C");
-const choiceD = document.getElementById("D");
 const counter = document.getElementById("counter");
 const timeGauge = document.getElementById("timeGauge");
 const progress = document.getElementById("progress");
 const scoreDiv = document.getElementById("scoreContainer");
 
 // create our questions
-let questions = {{ questions | safe }}
+let questions = questions
 // create some variables
 
 const lastQuestion = questions.length - 1;
@@ -116,11 +60,10 @@ function renderQuestion(){
     let q = questions[runningQuestion];
 
     question.innerHTML = "<p>"+ q.question +"</p>";
-    category.innerHTML = q.category;
-    choiceA.innerHTML = q.correct;
-    choiceB.innerHTML = q.answer2;
-    choiceC.innerHTML = q.answer3;
-    choiceD.innerHTML = q.answer4;
+    qImg.innerHTML = "<img src="+ q.imgSrc +">";
+    choiceA.innerHTML = q.choiceA;
+    choiceB.innerHTML = q.choiceB;
+    choiceC.innerHTML = q.choiceC;
 }
 
 
@@ -183,7 +126,7 @@ function checkAnswer(answer){
     }else{
         // end the quiz and show the score
         clearInterval(TIMER);
-        // scoreRender();
+        scoreRender();
     }
 }
 
@@ -197,9 +140,22 @@ function answerIsWrong(){
     document.getElementById(runningQuestion).style.backgroundColor = "#f00";
 }
 
+// score render
+function scoreRender(){
+    scoreDiv.style.display = "block";
+
+    // calculate the amount of question percent answered by the user
+    const scorePerCent = Math.round(100 * score/questions.length);
+
+    // choose the image based on the scorePerCent
+    let img = (scorePerCent >= 80) ? "img/5.png" :
+              (scorePerCent >= 60) ? "img/4.png" :
+              (scorePerCent >= 40) ? "img/3.png" :
+              (scorePerCent >= 20) ? "img/2.png" :
+              "img/1.png";
+
+    scoreDiv.innerHTML = "<img src="+ img +">";
+    scoreDiv.innerHTML += "<p>"+ scorePerCent +"%</p>";
+}
 
 
-
-
-    </script>
-{% endblock %}
