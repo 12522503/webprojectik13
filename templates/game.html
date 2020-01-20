@@ -13,7 +13,7 @@
             <hr>
             <table class="table table-striped" style="width:100%">
               <tr>
-                <th>Speler</th>
+                <th>Spel er</th>
                 <th>Score</th>
               </tr>
                 {% for player in scores %}
@@ -47,7 +47,7 @@
                 </div>
                 <div id="progress"></div>
             </div>
-            <div id="scoreContainer" style="display: none"></div>
+            <div id="scoreContainer"></div>
             </div>
         </div>
     </div>
@@ -98,11 +98,11 @@ const timeGauge = document.getElementById("timeGauge");
 const progress = document.getElementById("progress");
 const scoreDiv = document.getElementById("scoreContainer");
 
-// create our questions
+// get questions from database
 let questions = {{ questions | safe }}
-// create some variables
 
-const lastQuestion = questions.length - 1;
+
+const lastQuestion = {{ amount }} - 1;
 let runningQuestion = 0;
 let count = 0;
 const questionTime = 10; // 10s
@@ -111,16 +111,38 @@ const gaugeUnit = gaugeWidth / questionTime;
 let TIMER;
 let score = 0;
 
+// shuffle indexes of questions
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
+
 // render a question
 function renderQuestion(){
     let q = questions[runningQuestion];
-
+    answers = [q.correct, q.answer2, q.answer3, q.answer4]
+    let index_array = shuffle([0, 1, 2, 3])
     question.innerHTML = "<p>"+ q.question +"</p>";
-    category.innerHTML = q.category;
-    choiceA.innerHTML = q.correct;
-    choiceB.innerHTML = q.answer2;
-    choiceC.innerHTML = q.answer3;
-    choiceD.innerHTML = q.answer4;
+    category.innerHTML = q.category
+    choiceA.innerHTML = answers[(index_array[0])];
+    choiceB.innerHTML = answers[(index_array[1])];
+    choiceC.innerHTML = answers[(index_array[2])];
+    choiceD.innerHTML = answers[(index_array[3])];
 }
 
 
@@ -148,6 +170,8 @@ function renderCounter(){
         counter.innerHTML = count;
         timeGauge.style.width = count * gaugeUnit + "px";
         count++
+
+    // if 10 seconds have passed (end question)
     }else{
         count = 0;
         // change progress color to red
@@ -169,6 +193,7 @@ function checkAnswer(answer){
     if( answer == questions[runningQuestion].correct){
         // answer is correct
         score++;
+        alert("correct")
         // change progress color to green
         answerIsCorrect();
     }else{

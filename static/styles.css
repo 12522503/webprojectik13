@@ -258,8 +258,7 @@ body{
 }
 
 .choice:hover{
-    border : 2px solid grey;
-    font-weight: bold;
+    color: blue;
 }
 
 #timer{
