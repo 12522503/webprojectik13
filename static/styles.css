@@ -261,6 +261,11 @@ body{
     color: blue;
 }
 
+.choice:active{
+    color: blue;
+    border: 1.5px solid grey;
+}
+
 #timer{
     height : 100px;
     width : 200px;

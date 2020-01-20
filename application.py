@@ -202,12 +202,14 @@ def errorhandler(e):
 @app.route("/getscores")
 def scores():
     info = db.execute("SELECT username, score FROM users WHERE room=:room", room=request.args.get("room"))
+    print(info)
     return jsonify(info)
 
 
 @app.route("/updatescore")
 def updatescore():
     user = request.args.get("user")
-    update = int(request.args.get("update"))
-    db.execute("UPDATE users SET score = score + :update WHERE username=:user", update=update, user=user)
-    return False
+    update = request.args.get("update")
+    print(user, update)
+    db.execute("UPDATE users SET score = :update WHERE username=:user", update=update, user=user)
+    return update

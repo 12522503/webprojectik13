@@ -23,6 +23,7 @@
               </tr>
                 {% endfor %}
             </table>
+            <select></select>
 
 
 
@@ -34,11 +35,13 @@
                 <h2 id="question"></h2>
                 <small>Categorie: </small>
                 <h5 id="category"></h5><hr>
+                <font id="incorrect" color="red">Helaas, dat is fout!</font>
+                <font id="correct" color="green">Jouw gekozen antwoord is goed!</font>
                 <div id="choices">
-                    <div class="choice" id="A" onclick="checkAnswer('A')"></div><br>
-                    <div class="choice" id="B" onclick="checkAnswer('B')"></div><br>
-                    <div class="choice" id="C" onclick="checkAnswer('C')"></div><br>
-                    <div class="choice" id="D" onclick="checkAnswer('D')"></div><br>
+                    <div class="choice" id="A" onclick="checkAnswer(0)"></div><br>
+                    <div class="choice" id="B" onclick="checkAnswer(1)"></div><br>
+                    <div class="choice" id="C" onclick="checkAnswer(2)"></div><br>
+                    <div class="choice" id="D" onclick="checkAnswer(3)"></div><br>
                 </div>
                 <div id="timer">
                     <div id="counter"></div>
@@ -52,35 +55,10 @@
         </div>
     </div>
     <script>
-            //   When page fully loaded
-    jQuery(document).ready(function(){
-        alert("test");
-        startQuiz();
-    });
-
-    // Get scores from JSON
-    function get_scores()
-    {
-        url= "/getscores?room=" + '{{ room }}';
-        $.getJSON(url, function(data) {
-            var response = JSON.stringify(data);
-            return response;
-        });
-    }
-    var scores = get_scores();
 
 
-    // Update score (insert user and +/- integer)
-    // function update_score(user, update)
-    // {
-    //     url = "/updatescore?user="+user+"?update="+update;
-    //     alert(url);
-    //     $.get(url, function(data) {
-    //         if (data == true)
-    //         {}
-    //     });
-    // }
-    // update_score('{{ user }}', '{{ room }}');
+
+
 
     // Select all elements
     // select all elements
@@ -97,6 +75,8 @@ const counter = document.getElementById("counter");
 const timeGauge = document.getElementById("timeGauge");
 const progress = document.getElementById("progress");
 const scoreDiv = document.getElementById("scoreContainer");
+const correct = document.getElementById("correct");
+const incorrect = document.getElementById("incorrect");
 
 // get questions from database
 let questions = {{ questions | safe }}
@@ -105,11 +85,62 @@ let questions = {{ questions | safe }}
 const lastQuestion = {{ amount }} - 1;
 let runningQuestion = 0;
 let count = 0;
-const questionTime = 10; // 10s
-const gaugeWidth = 150; // 150px
+const questionTime = 7; // 10s
+const gaugeWidth = 550; // 150px
 const gaugeUnit = gaugeWidth / questionTime;
 let TIMER;
 let score = 0;
+
+//   When page fully loaded
+    jQuery(document).ready(function(){
+        alert("test");
+        hide(0);
+        startQuiz();
+        correct.style.display = "none";
+        incorrect.style.display = "none";
+    });
+
+    // Get scores from JSON
+    function get_scores()
+    {
+        url= "/getscores?room=" + '{{ room }}';
+        $.getJSON(url, function(data) {
+            var response = JSON.stringify(data);
+            return response;
+        });
+    }
+    var scores = get_scores();
+
+    // Update score (insert user and +/- integer)
+    function update_score(user, update)
+    {
+        url = "/updatescore?user="+user+"&update="+update;
+        $.get(url, function(data) {
+            if (data == true)
+            {}
+        });
+    }
+
+// hide options if option is clicked
+function hide(hide){
+    var a = document.getElementById("A");
+    var b = document.getElementById("B");
+    var c = document.getElementById("C");
+    var d = document.getElementById("D");
+
+    if (hide == 0){
+        a.style.display = "block";
+        b.style.display = "block";
+        c.style.display = "block";
+        d.style.display = "block";
+    }else{
+        a.style.display = "none";
+        b.style.display = "none";
+        c.style.display = "none";
+        d.style.display = "none";
+    }
+}
+
 
 // shuffle indexes of questions
 function shuffle(array) {
@@ -134,9 +165,17 @@ function shuffle(array) {
 
 // render a question
 function renderQuestion(){
+    alert(score)
+    hide(0);
+    correct.style.display = "none";
+    incorrect.style.display = "none";
     let q = questions[runningQuestion];
     answers = [q.correct, q.answer2, q.answer3, q.answer4]
     let index_array = shuffle([0, 1, 2, 3])
+
+    // to check later if answer is correct
+    correctindex = index_array.indexOf(0)
+
     question.innerHTML = "<p>"+ q.question +"</p>";
     category.innerHTML = q.category
     choiceA.innerHTML = answers[(index_array[0])];
@@ -173,9 +212,8 @@ function renderCounter(){
 
     // if 10 seconds have passed (end question)
     }else{
+        hide(0);
         count = 0;
-        // change progress color to red
-        answerIsWrong();
         if(runningQuestion < lastQuestion){
             runningQuestion++;
             renderQuestion();
@@ -190,26 +228,32 @@ function renderCounter(){
 // checkAnwer
 
 function checkAnswer(answer){
-    if( answer == questions[runningQuestion].correct){
+
+    if( answer == correctindex){
         // answer is correct
-        score++;
-        alert("correct")
+        score = score + (questions[runningQuestion]).pointscorrect;
+        correct.style.display = "block";
         // change progress color to green
         answerIsCorrect();
     }else{
         // answer is wrong
         // change progress color to red
+        score = score + (questions[runningQuestion]).pointsincorrect
         answerIsWrong();
+        incorrect.style.display = "block";
     }
-    count = 0;
-    if(runningQuestion < lastQuestion){
-        runningQuestion++;
-        renderQuestion();
-    }else{
-        // end the quiz and show the score
-        clearInterval(TIMER);
+    hide(1);
+    update_score("{{ user }}", score)
+
+    // count = 0;
+    // if(runningQuestion < lastQuestion){
+    //     runningQuestion++;
+    //     renderQuestion();
+    // }else{
+    //     // end the quiz and show the score
+    //     clearInterval(TIMER);
         // scoreRender();
-    }
+    // }
 }
 
 // answer is correct
