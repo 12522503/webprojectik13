@@ -85,6 +85,21 @@ def index():
 @app.route("/makeroom", methods=["GET", "POST"])
 def makeroom():
     """Show start screen for website"""
+    number = request.form.get("category")
+
+    # Choose random question within category
+    if number == 0:
+        index = random.randint(0,4)
+    if number == 1:
+        index = random.randint(5,9)
+    if number == 2:
+        index = random.randint(10,14)
+    if number == 3:
+        index = random.randint(15,19)
+
+    # Set question index in database
+    db.execute("UPDATE rooms SET nextindex = :index", index=index)
+
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "GET":
         return render_template("makeroom.html")
