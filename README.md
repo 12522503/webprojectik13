@@ -69,4 +69,5 @@ def double ():
 
 ## Plugin/Frameworks
 - Er zal gebruikt gemaakt worden van verschillende frameworks als bootstrap. Wanneer de front end van de site duidelijk wordt zullen we belsuit wel vormgeving deze zal krijgen.
-- Als plugin zal er Flask-DebugToolbar gebruikt worden https://flask-debugtoolbar.readthedocs.io/en/latest/
+- Als plugin zal er Flask-DebugToolbar gebruikt worden https://flask-debugtoolbar.readthedocs.io/en/latest/, 
+het downloaden hiervan is uiteindelijk niet gelukt en is deze plugin dus ook niet gebruikt.
