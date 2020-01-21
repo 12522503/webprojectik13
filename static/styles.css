@@ -258,8 +258,17 @@ body{
 }
 
 .choice:hover{
+<<<<<<< HEAD
     border : 2px solid grey;
     font-weight: bold;
+=======
+    color: blue;
+}
+
+.choice:active{
+    color: blue;
+    border: 1.5px solid grey;
+>>>>>>> 88383455a62063146ac736c4dbbd616ed3c094a3
 }
 
 #timer{
