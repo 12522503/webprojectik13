@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="nl">
 
     <head>
 
@@ -20,7 +20,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
-        <title>Het spel van Minerva {% block title %}{% endblock %}</title>
+        <title>Het spel van Minerva: {% block title %}{% endblock %}</title>
 
     </head>
 
@@ -28,26 +28,15 @@
 
         <nav class="navbar navbar-expand-md navbar-light bg-light border">
             <a class="navbar-brand" href="/"><span class="blue">Het<span class="yellow"> spel</span><span class="green"> van</span> <span class="red">Minerva</span></a>
-            <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbar" data-toggle="collapse" type="button">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+
+
+
             <div class="collapse navbar-collapse" id="navbar">
-                {% if session.user_id %}
-                    <ul class="navbar-nav mr-auto mt-2">
-                        <li class="nav-item"><a class="nav-link" href="/quote">Quote</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/buy">Buy</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/sell">Sell</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
-                    </ul>
-                    <ul class="navbar-nav ml-auto mt-2">
-                        <li class="nav-item"><a class="nav-link" href="/passwordchange">Change Password</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
-                    </ul>
-                {% else %}
+
                     <ul class="navbar-nav ml-auto mt-2">
                         <li class="nav-item"><a class="nav-link" href="/thanks">Special thanks</a></li>
                     </ul>
-                {% endif %}
+
             </div>
         </nav>
 
@@ -63,10 +52,11 @@
             {% block main %}{% endblock %}
         </main>
 
-        <footer class="small text-center text-muted">
-            <br></br>
-            <small><b>Webpages made by Jesse van der Sluis, Maxime van Munster & Rowan Duits @ University of Amsterdam</b></small>
-        </footer>
+        <div class="footer">
+            <br><br>
+            <img src="/static/webprog.jpg" height="80">
+
+        </div>
 
     </body>
 

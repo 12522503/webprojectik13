@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Kamer
+{% endblock %}
+
+{% block main %}
+<script>
+    // Check if game is ready (set by host)
+    function check_if_ready(){
+       time=setInterval(function()
+    {
+        url = "/check?room=" + '{{ room }}';
+        $.get(url, function(data) {
+            // If ready, redirect to game
+            if (data == true)
+            {
+                window.location.href = "/game";
+            }
+        });
+    });
+    }
+
+    // When page fully loaded
+    jQuery(document).ready(function(){
+        host = '{{ host }}'
+        if (host == "no")
+            check_if_ready();
+    });
+
+    // Set game ready (host) and redirect to gamepage
+    function ready()
+    {
+        url= "/setready?room=" + '{{ room }}';
+        $.get(url, function(data) {
+            if (data == true)
+            {
+                window.location.href = "/game";
+            }
+        });
+    }
+</script>
+<div id="rcorners3">
+    <br>
+    <h1>{{ top }}</h1>
+    <a>Je speelt onder de naam </a>
+    <b><font color="blue">{{ user }}</font></b>
+    <a> in de kamer</a>
+    <b><font color="blue">{{ room }}</font><br>
+    {{ message }}</b><br>
+    <b><font color="red">{{ w }}</font><br><br><br>
+
+
+    <form name="startgame"></form>
+    {% if host == "yes" %}
+        <button class="btn btn-primary" type="submit" onclick=ready()>Spel starten</button><br><br>
+    {% endif %}
+    </form>
+    <img src="static/Spinner-1s-200px (1).gif">
+
+</div>
+{% endblock %}

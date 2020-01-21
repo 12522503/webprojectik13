@@ -58,79 +58,24 @@ tr {
     padding: 15px;
 }
 
+.formsmall {
+    width: 100px;
+}
+
 th {
     height: 100px;
     padding: 15px;
 }
 
 body{
-    background-color: #191970;
+    /*background-color: #191970;*/
+    background-image: url("tweede-kamer-min.jpg");
+    background-repeat: repeat-x;
+    background-size: cover;
 }
 
-#occupants1 {
-    color: rgb(0,100,0);
 
-}
 
-#occupants2 {
-    color: rgb(255,0,0);
-}
-
-#occupants3 {
-    color: rgb(255,69,0);
-}
-
-.blocktext {
-    color: black;
-}
-
-/*Dit is alles voor de interactieve tabel*/
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-
-.table-editable {
-  position: relative;
-}
-
-.table-editable .glyphicon {
-    font-size: 20px;
-}
-
-.table-remove {
-  color: #700;
-  cursor: pointer;
-}
-
-/*Specifieke hover werkt niet*/
-/*.table-remove :hover {*/
-/*    color: #f00;*/
-/*}*/
-
-.table-up,
-.table-down {
-  color: #007;
-  cursor: pointer;
-}
-
-/*Specifieke hover werkt niet*/
-/*.table-up, .table-down :hover {*/
-/*    color: #00f;*/
-/*}*/
-
-.table-add {
-  color: #070;
-  cursor: pointer;
-  position: absolute;
-  top: 8px;
-  right: 0;
-}
-
-/*Specifieke hover werkt niet*/
-/*.table-add :hover {*/
-/*    color: #0b0;*/
-/*}*/
 
 .cblock {
     border-collapse:separate;
@@ -171,19 +116,27 @@ table {
 #rcorners1 {
   border-radius: 25px;
   background: white;
-  border: 4px solid grey;
+  border: 4px solid orange;
   padding: 20px;
   width: 400px;
-  height: 500px;
+  height: auto;
 }
 
 #rcorners2 {
   border-radius: 25px;
   background: white;
-  border: 4px solid grey;
+  border: 4px solid darkred;
   padding: 20px;
-  width: 600px;
-  height: 500px;
+  width: auto;
+  height: auto;
+}
+
+#rcorners3 {
+  border-radius: 25px;
+  background: white;
+  border: 4px solid orange;
+  width: 1000px;
+  height: auto;
 }
 
 /* Style the form - display items horizontally */
@@ -230,3 +183,145 @@ table {
     align-items: stretch;
   }
 }
+
+.button1 {
+    background-color: grey;
+    color: white;
+    width: auto;
+    height: 40px;
+    border-radius: 5px;
+}
+
+.button2 {
+    background-color: lightblue;
+    color: white;
+    width: auto;
+    height: 40px;
+    border-radius: 5px;
+}
+
+#page-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+#content-wrap {
+  padding-bottom: 2.5rem;    /* Footer height */
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 150px;
+  background-color: white;
+  color: white;
+  border-color: grey;
+  border-radius: 2px;
+  text-align: center;
+}
+
+/*#question{*/
+/*    width:500px;*/
+/*    height : 125px;*/
+/*    position: absolute;*/
+/*    right:0;*/
+/*    top:0;*/
+/*}*/
+/*#question p{*/
+/*    margin : 0;*/
+/*    padding : 15px;*/
+/*    font-size: 1.25em;*/
+/*}*/
+
+/*#choices{*/
+/*    width : 480px;*/
+/*    position: absolute;*/
+/*    right : 0;*/
+/*    top : 125px;*/
+/*    padding : 10px*/
+}
+.choice{
+    display: inline-block;
+    width : 135px;
+    text-align: center;
+    border : 1px solid grey;
+    border-radius: 5px;
+    cursor: pointer;
+    padding : 5px;
+}
+
+.choice{
+    border : 1px solid grey;
+    border-radius: 20px;
+}
+
+.choice:hover{
+    border : 2px solid grey;
+    font-weight: bold;
+}
+
+#timer{
+    height : 100px;
+    width : 200px;
+
+    text-align: left;
+}
+#counter{
+    font-size: 3em;
+}
+#btimeGauge{
+    width : 150px;
+    height : 10px;
+    border-radius: 10px;
+    background-color: white;
+
+}
+#timeGauge{
+    height : 10px;
+    border-radius: 10px;
+    background-color: mediumseagreen;
+
+}
+#progress{
+    width : 500px;
+
+    text-align: right;
+}
+/*.prog{*/
+/*    width : 25px;*/
+/*    height : 25px;*/
+/*    border: 1px solid #000;*/
+/*    display: inline-block;*/
+/*    border-radius: 50%;*/
+/*    margin-left : 5px;*/
+/*    margin-right : 5px;*/
+/*}*/
+/*#scoreContainer{*/
+/*    margin : 20px auto;*/
+/*    background-color: white;*/
+/*    opacity: 0.8;*/
+/*    height: 300px;*/
+/*    width : 700px;*/
+/*    border-radius: 5px;*/
+/*    box-shadow: 0px 5px 15px 0px;*/
+/*    position: relative;*/
+/*    display: none;*/
+/*}*/
+/*#scoreContainer img{*/
+/*    position: absolute;*/
+/*    top:100px;*/
+/*    left:325px;*/
+/*}*/
+/*#scoreContainer p{*/
+/*    position: absolute;*/
+/*    display: block;*/
+/*    width : 59px;*/
+/*    height :59px;*/
+/*    top:130px;*/
+/*    left:325px;*/
+/*    font-size: 1.5em;*/
+/*    font-weight: bold;*/
+/*    text-align: center;*/
+/*}*/

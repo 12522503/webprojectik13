@@ -1,0 +1,205 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main %}
+
+    <div class="first-column">
+        <div id="rcorners1">
+            <large><font align="left" color="blue">Jij: {{ user }}</font><br></large>
+            <h5>Kamer: {{ room }}</h5>
+            <hr>
+            <table class="table table-striped" style="width:100%">
+              <tr>
+                <th>Speler</th>
+                <th>Score</th>
+              </tr>
+                {% for player in scores %}
+              <tr>
+                <td>{{ scores.user }}</td>
+                <td>{{ scores.score}}</td>
+              </tr>
+                {% endfor %}
+            </table>
+
+
+
+        </div>
+    </div>
+    <div class="second-column">
+        <div id="rcorners2">
+            <div id="quiz" style="display: none">
+                <h2 id="question"></h2>
+                <small>Categorie: </small>
+                <h5 id="category"></h5><hr>
+                <div id="choices">
+                    <div class="choice" id="A" onclick="checkAnswer('A')"></div><br>
+                    <div class="choice" id="B" onclick="checkAnswer('B')"></div><br>
+                    <div class="choice" id="C" onclick="checkAnswer('C')"></div><br>
+                    <div class="choice" id="D" onclick="checkAnswer('D')"></div><br>
+                </div>
+                <div id="timer">
+                    <div id="counter"></div>
+                    <div id="btimeGauge"></div>
+                    <div id="timeGauge"></div>
+                </div>
+                <div id="progress"></div>
+            </div>
+            <div id="scoreContainer" style="display: none"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+            //   When page fully loaded
+    jQuery(document).ready(function(){
+        alert("test");
+        startQuiz();
+    });
+
+    // Get scores from JSON
+    function get_scores()
+    {
+        url= "/getscores?room=" + '{{ room }}';
+        $.getJSON(url, function(data) {
+            var response = JSON.stringify(data);
+            return response;
+        });
+    }
+    var scores = get_scores();
+
+
+    // Update score (insert user and +/- integer)
+    // function update_score(user, update)
+    // {
+    //     url = "/updatescore?user="+user+"?update="+update;
+    //     alert(url);
+    //     $.get(url, function(data) {
+    //         if (data == true)
+    //         {}
+    //     });
+    // }
+    // update_score('{{ user }}', '{{ room }}');
+
+    // Select all elements
+    // select all elements
+
+const quiz = document.getElementById("quiz");
+const question = document.getElementById("question");
+const category = document.getElementById("category")
+const qImg = document.getElementById("qImg");
+const choiceA = document.getElementById("A");
+const choiceB = document.getElementById("B");
+const choiceC = document.getElementById("C");
+const choiceD = document.getElementById("D");
+const counter = document.getElementById("counter");
+const timeGauge = document.getElementById("timeGauge");
+const progress = document.getElementById("progress");
+const scoreDiv = document.getElementById("scoreContainer");
+
+// create our questions
+let questions = {{ questions | safe }}
+// create some variables
+
+const lastQuestion = questions.length - 1;
+let runningQuestion = 0;
+let count = 0;
+const questionTime = 10; // 10s
+const gaugeWidth = 150; // 150px
+const gaugeUnit = gaugeWidth / questionTime;
+let TIMER;
+let score = 0;
+
+// render a question
+function renderQuestion(){
+    let q = questions[runningQuestion];
+
+    question.innerHTML = "<p>"+ q.question +"</p>";
+    category.innerHTML = q.category;
+    choiceA.innerHTML = q.correct;
+    choiceB.innerHTML = q.answer2;
+    choiceC.innerHTML = q.answer3;
+    choiceD.innerHTML = q.answer4;
+}
+
+
+
+// start quiz
+function startQuiz(){
+    renderQuestion();
+    quiz.style.display = "block";
+    renderProgress();
+    renderCounter();
+    TIMER = setInterval(renderCounter,1000); // 1000ms = 1s
+}
+
+// render progress
+function renderProgress(){
+    for(let qIndex = 0; qIndex <= lastQuestion; qIndex++){
+        progress.innerHTML += "<div class='prog' id="+ qIndex +"></div>";
+    }
+}
+
+// counter render
+
+function renderCounter(){
+    if(count <= questionTime){
+        counter.innerHTML = count;
+        timeGauge.style.width = count * gaugeUnit + "px";
+        count++
+    }else{
+        count = 0;
+        // change progress color to red
+        answerIsWrong();
+        if(runningQuestion < lastQuestion){
+            runningQuestion++;
+            renderQuestion();
+        }else{
+            // end the quiz and show the score
+            clearInterval(TIMER);
+            scoreRender();
+        }
+    }
+}
+
+// checkAnwer
+
+function checkAnswer(answer){
+    if( answer == questions[runningQuestion].correct){
+        // answer is correct
+        score++;
+        // change progress color to green
+        answerIsCorrect();
+    }else{
+        // answer is wrong
+        // change progress color to red
+        answerIsWrong();
+    }
+    count = 0;
+    if(runningQuestion < lastQuestion){
+        runningQuestion++;
+        renderQuestion();
+    }else{
+        // end the quiz and show the score
+        clearInterval(TIMER);
+        // scoreRender();
+    }
+}
+
+// answer is correct
+function answerIsCorrect(){
+    document.getElementById(runningQuestion).style.backgroundColor = "#0f0";
+}
+
+// answer is Wrong
+function answerIsWrong(){
+    document.getElementById(runningQuestion).style.backgroundColor = "#f00";
+}
+
+
+
+
+
+    </script>
+{% endblock %}

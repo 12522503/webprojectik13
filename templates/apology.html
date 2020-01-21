@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main %}
+<script>
+function goBack() {
+  window.history.back();
+}
+</script>
+
+<div id="rcorners3" align="center">
+  <br><br>
+  <img src="/static/baudet.gif">
+
+<h3 color="red">OEI DAT GING FOUT</h3>
+<h4><b> ERROR {{ top }}</b></h4>
+<br>
+{{ bottom }}
+<br>
+<button class="button1" onclick="goBack()">Ga terug naar de vorige pagina</button><br><br>
+</div>
+
+
+
+{% endblock %}
