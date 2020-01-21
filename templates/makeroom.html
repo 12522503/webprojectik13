@@ -5,7 +5,18 @@
 {% endblock %}
 
 {% block main %}
-
+<script>
+    // Get category from database
+    function categoryChoice(number)
+    {
+        url= "/question?cat=" + number;
+        $.getJSON(url, function(data) {
+            if (data == true)
+            {}
+        });
+    }
+    var scores = get_scores();
+</script>
 <div id="rcorners3">
     <br>
     <div class="blocktext">
@@ -27,6 +38,12 @@
             {% for x in range(11) if x > 0 %}
             <option value="{{x}}">{{x}}</option>
             {% endfor %}
+        </select>
+        <select name="category" class="button1">
+            <option onclick="categoryChoice(0)">Fractievoorzitters en ministers</option>
+            <option onclick="categoryChoice(1)">Politiek spectrum</option>
+            <option onclick="categoryChoice(2)">Geschiedenis</option>
+            <option onclick="categoryChoice(3)">Uitspraken</option>
         </select>
 
         <button class="btn btn-primary" type="submit" href="/">Aanmaken</button><br><br>

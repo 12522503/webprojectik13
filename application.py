@@ -2,6 +2,7 @@ import os
 import datetime
 from datetime import date
 import json
+import random
 
 from helpers import apology
 from cs50 import SQL
@@ -214,3 +215,36 @@ def updatescore():
     db.execute("UPDATE users SET score = :update WHERE username=:user", update=update, user=user)
     return update
 
+
+@app.route("/question")
+def question():
+    # Choose questions with chosen category
+    number = request.args.get("cat")
+
+    # Choose random question within category
+    if number == 0:
+        index = random.randint(0,4)
+    if number == 1:
+        index = random.randint(5,9)
+    if number == 2:
+        index = random.randint(10,14)
+    if number == 3:
+        index = random.randint(15,19)
+
+    # Set question index in database
+    db.execute("UPDATE rooms SET nextindex = :index", index=index)
+
+    # Return question index
+    return jsonify(index)
+
+@app.route("/checkquestion")
+def checkquestion():
+    # Select room
+    room = request.args.get("room")
+    row = db.execute("SELECT * FROM rooms WHERE room = :room", room=room)
+
+    # Select index of next question
+    index = row["nextindex"]
+
+    # Return question index
+    return jsonify(index)

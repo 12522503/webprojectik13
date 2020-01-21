@@ -163,9 +163,21 @@ function shuffle(array) {
 }
 
 
+// Checks current question
+function checkquestion()
+    {
+        url= "/checkquestion?room=" + '{{ room }}';
+        $.getJSON(url, function(data) {
+            var response = JSON.stringify(data);
+            index = parseInt(response)
+            return index;
+        });
+    }
+
+
 // render a question
 function renderQuestion(){
-    alert(score)
+    runningQuestion = checkquestion()
     hide(0);
     correct.style.display = "none";
     incorrect.style.display = "none";
