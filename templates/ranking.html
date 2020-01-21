@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Ranking
+{% endblock %}
+
+{% block main %}
+
+    <div class="first-column">
+        <div id="rcorners1">
+            <img src="static/minerva.jpg">
+
+            <!--<table class="table table-striped" style="width:100%">-->
+            <!--    <tr>-->
+            <!--        <th>Kamer</th>-->
+            <!--        <th>Gebruikers</th>-->
+            <!--        <th>Datum</th>-->
+            <!--    </tr>-->
+            <!--        {% for item in info %}-->
+            <!--    <tr>-->
+            <!--        <td>{{ item.room }}</td>-->
+            <!--        <td>{{ item.useramount}}</td>-->
+            <!--        <td>{{ item.dates }}</td>-->
+            <!--    </tr>-->
+            <!--        {% endfor %}-->
+            <!--</table>-->
+
+
+        </div>
+    </div>
+    <div class="second-column">
+        <div id="rcorners2">
+            <div class="blocktext">
+                 <table class="table table-borderd"  style="background-color:powderblue;">
+        <tr>
+        <th> Ranking </th>
+        <th>Gebruikersnaam </th>
+        <th>Totale score </th>
+        <th>  </th>
+
+        </tr>
+
+            {% for item in ranking %}
+
+        <tr>
+            <td> {{item["rank"]}} </td>
+            <td>{{item["username"]}} </td>
+            <td>{{item["score"]}} </td>
+            {% endfor %}
+            {% for item in ranking if item["rank"] < 3 %}
+            <td> <button class="btn btn-primary" type="submit" href="/final">Speel Finale! </button><br><br> </td>
+
+            {% endfor %}
+             </tr>
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
