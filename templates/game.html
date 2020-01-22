@@ -13,10 +13,7 @@
             <hr>
             <table class="table table-striped" style="width:100%">
               <tr>
-                <th>Spel er</th>
-
                 <th>Speler</th>
-
                 <th>Score</th>
               </tr>
                 {% for player in scores %}
@@ -26,10 +23,13 @@
               </tr>
                 {% endfor %}
             </table>
-            <select></select>
-
-
-
+            <div style="display:none">
+                <b><font>Kies een categorie voor de volgende vraag:</font></b>
+                <div class="choice" id="0" onclick="nextquestion(0)">Fractievoorzitters & Ministers</div>
+                <div class="choice" id="1" onclick="nextquestion(1)">Politiek Spectrum</div>
+                <div class="choice" id="2" onclick="nextquestion(2)">Geschiedenis</div>
+                <div class="choice" id="3" onclick="nextquestion(3)">Uitspraken</div>
+            </div>
         </div>
     </div>
     <div class="second-column">
@@ -86,7 +86,8 @@ let questions = {{ questions | safe }}
 
 
 const lastQuestion = {{ amount }} - 1;
-let runningQuestion = 0;
+let numberQuestion = 0;
+let runningQuestion;
 let count = 0;
 const questionTime = 7; // 10s
 const gaugeWidth = 550; // 150px
@@ -103,16 +104,33 @@ let score = 0;
         incorrect.style.display = "none";
     });
 
-    // Get scores from JSON
-    function get_scores()
+var scores
+// Get scores from JSON
+function get_scores()
     {
+        alert("TEST 2 in get_scores")
         url= "/getscores?room=" + '{{ room }}';
-        $.getJSON(url, function(data) {
-            var response = JSON.stringify(data);
-            return response;
-        });
+        // If loaded, start gotData
+        $.getJSON(url, gotScores)
     }
-    var scores = get_scores();
+
+// If loaded, render question
+function gotScores(data){
+
+    scores = data
+    alert("TEST 3 in gotScores, data=", scores)
+    loadnext(scores)
+}
+    // // Get scores from JSON
+    // function get_scores()
+    // {
+    //     url= "/getscores?room=" + '{{ room }}';
+    //     $.getJSON(url, function(data) {
+    //         var response = JSON.stringify(data);
+    //         return response;
+    //     });
+    // }
+    // var scores = get_scores();
 
     // Update score (insert user and +/- integer)
     function update_score(user, update)
@@ -165,23 +183,38 @@ function shuffle(array) {
   return array;
 }
 
+function nextquestion(option){
+    url = "/question?cat=" + option;
+    $.getJSON(url, function(data){
+        if(data == true)
+        {}
+    })
+}
 
+var index;
 
-// Checks current question
+// Checks index of current question
 function checkquestion()
     {
         url= "/checkquestion?room=" + '{{ room }}';
-        $.getJSON(url, function(data) {
-            var response = JSON.stringify(data);
-            index = parseInt(response)
-            return index;
-        });
+        // If loaded, start gotData
+        $.getJSON(url, gotData)
     }
+
+// If loaded, render question
+function gotData(data){
+    index = data;
+    renderQuestion(index)
+}
+
 
 
 // render a question
-function renderQuestion(){
-    runningQuestion = checkquestion()
+function renderQuestion(index){
+    runningQuestion = index;
+    // alert(index)
+    // runningQuestion = checkquestion()
+    alert(runningQuestion)
     hide(0);
     correct.style.display = "none";
     incorrect.style.display = "none";
@@ -204,7 +237,7 @@ function renderQuestion(){
 
 // start quiz
 function startQuiz(){
-    renderQuestion();
+    checkquestion();
     quiz.style.display = "block";
     renderProgress();
     renderCounter();
@@ -230,9 +263,10 @@ function renderCounter(){
     }else{
         hide(0);
         count = 0;
-        if(runningQuestion < lastQuestion){
+        alert(runningQuestion, lastQuestion)
+        if(numberQuestion < lastQuestion){
             runningQuestion++;
-            renderQuestion();
+            checkquestion();
         }else{
             // end the quiz and show the score
             clearInterval(TIMER);
@@ -244,22 +278,35 @@ function renderCounter(){
 // checkAnwer
 
 function checkAnswer(answer){
+    numberQuestion ++;
 
     if( answer == correctindex){
         // answer is correct
         score = score + (questions[runningQuestion]).pointscorrect;
         correct.style.display = "block";
         // change progress color to green
-        answerIsCorrect();
+        // answerIsCorrect();
     }else{
         // answer is wrong
         // change progress color to red
         score = score + (questions[runningQuestion]).pointsincorrect
-        answerIsWrong();
+        // answerIsWrong();
         incorrect.style.display = "block";
     }
+    alert("TEST 0 in checkAnswer")
     hide(1);
     update_score("{{ user }}", score)
+    alert("TEST 1 before get_scores")
+    get_scores()
+
+
+function loadnext(scores){
+    scores = scores
+    alert("TEST 4 in loadnext", scores)
+
+}
+
+    // checkquestion()
 
     // count = 0;
     // if(runningQuestion < lastQuestion){

@@ -93,20 +93,22 @@ def makeroom():
 
     # User reached route via POST
     else:
-        number = request.form.get("category")
+        number = int(request.form.get("category"))
+        print("NUMBER= ", number, "TYPE: ", type(number))
 
         # Choose random question within category
         if number == 0:
             index = random.randint(0,4)
         if number == 1:
+            print("CORRECT")
             index = random.randint(5,9)
         if number == 2:
             index = random.randint(10,14)
         if number == 3:
             index = random.randint(15,19)
 
-        # Set question index in database
-        db.execute("UPDATE rooms SET nextindex = :index", index=index)
+        # # Set question index in database
+        # db.execute("UPDATE rooms SET nextindex = :index WHERE room=:room", index=index, room=request.form.get("room"))
 
         # Get all variables
         roomname = request.form.get("room")
@@ -129,8 +131,8 @@ def makeroom():
             return apology("Vul een gebruikersnaam in.")
 
         # Insert room into rooms table
-        db.execute("INSERT INTO rooms (room, useramount, dates, questions) VALUES(:room, :useramount, :date , :q)",
-                    room=roomname, useramount=1, date=date.today(), q=int(questions))
+        db.execute("INSERT INTO rooms (room, useramount, dates, questions, nextindex) VALUES(:room, :useramount, :date, :q, :index)",
+                    room=roomname, useramount=1, date=date.today(), q=int(questions), index=index)
 
         # Insert user into users table
         db.execute("INSERT INTO users (username, room, fifty, double, joker, score, ready) VALUES(:name, :room, :f, :d, :j, :s, :r)",
@@ -238,6 +240,7 @@ def question():
     # Choose questions with chosen category
     number = request.args.get("cat")
 
+
     # Choose random question within category
     if number == 0:
         index = random.randint(0,4)
@@ -260,8 +263,11 @@ def checkquestion():
     room = request.args.get("room")
     row = db.execute("SELECT * FROM rooms WHERE room = :room", room=room)
 
+
     # Select index of next question
-    index = row["nextindex"]
+    index = row[0]["nextindex"]
+    print("INDEX: ", index)
+
 
     # Return question index
     return jsonify(index)
