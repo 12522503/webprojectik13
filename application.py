@@ -186,6 +186,16 @@ def game():
     room=session["room"]
     questionamount = (db.execute("SELECT questions FROM rooms WHERE room=:room", room=room))[0]["questions"]
 
+    # User scores
+    room=session["room"]
+    getinfo = db.execute("SELECT username, score FROM users WHERE room=:room", room=room)
+    info = dict()
+    for item in getinfo:
+        user = item["username"]
+        score = item["score"]
+        info[user] = score
+
+
     # Get questions
     questiondata = db.execute("SELECT * FROM questions")
     questions = []
@@ -201,7 +211,7 @@ def game():
         qdict["pointsincorrect"] = line["pointsincorrect"]
         questions.append(qdict)
 
-    return render_template("game.html", user=session["user"], room=session["room"], questions=questions, amount=questionamount)
+    return render_template("game.html", user=session["user"], room=session["room"], questions=questions, amount=questionamount, scores=info)
 
 
 
@@ -243,7 +253,7 @@ def updatescore():
 @app.route("/question")
 def question():
     # Choose questions with chosen category
-    number = request.args.get("cat")
+    number = int(request.args.get("cat"))
 
 
     # Choose random question within category
@@ -284,7 +294,11 @@ def ranking():
     if request.method == "GET":
 
         # get used room
+<<<<<<< HEAD
         room= "ranking"
+=======
+        room= request.args.get("room")
+>>>>>>> 931b5c0ef3284f321785acd1393230e2f917cd14
 
         # get username and score using room out of db
         ranking = db.execute("SELECT username, score FROM users WHERE room = :room", room=room)
@@ -303,7 +317,38 @@ def ranking():
     else:
         return render_template("final.html")
 
+<<<<<<< HEAD
 @app.route("/lost", methods=["GET", "POST"])
 def lost():
     if request.method == "GET":
         return render_template("lost.html")
+=======
+
+@app.route("/final", methods=["GET", "POST"])
+def final():
+    # Get information of room
+    room=session["room"]
+    getinfo = db.execute("SELECT username, score FROM users WHERE room=:room", room=room)
+    info = dict()
+    for item in getinfo:
+        user = item["username"]
+        score = item["score"]
+        info[user] = score
+    questionamount = (db.execute("SELECT questions FROM rooms WHERE room=:room", room=room))[0]["questions"]
+    # Get questions
+    questiondata = db.execute("SELECT * FROM questions")
+    questions = []
+    for line in questiondata:
+        qdict = dict()
+        qdict["question"] = line["question"]
+        qdict["category"] = line["category"]
+        qdict["correct"] = line["correctanswer"]
+        qdict["answer2"] = line["answer2"]
+        qdict["answer3"] = line["answer3"]
+        qdict["answer4"] = line["answer4"]
+        qdict["pointscorrect"] = line["pointscorrect"]
+        qdict["pointsincorrect"] = line["pointsincorrect"]
+        questions.append(qdict)
+
+    return render_template("final.html", user=session["user"], scores=info, room=session["room"], questions=questions, amount=questionamount)
+>>>>>>> 931b5c0ef3284f321785acd1393230e2f917cd14

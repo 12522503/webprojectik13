@@ -46,6 +46,13 @@
             <td> {{item["rank"]}} </td>
             <td>{{item["username"]}} </td>
             <td>{{item["score"]}} </td>
+<<<<<<< HEAD
+=======
+            {% endfor %}
+            {% for item in ranking if item["rank"] < 3 %}
+            <!--<td> <button class="btn btn-primary" type="submit" href="/final">Speel Finale! </button><br><br> </td>-->
+            <td> <button class="btn btn-primary" onclick="window.location.href = '/final';">Speel Finale! </button><br><br> </td>
+>>>>>>> 931b5c0ef3284f321785acd1393230e2f917cd14
 
             <!--top 2 will play final-->
             {% if item["rank"] < 3 and item["username"]  ==  user  %}
