@@ -221,8 +221,13 @@ def errorhandler(e):
 
 @app.route("/getscores")
 def scores():
-    info = db.execute("SELECT username, score FROM users WHERE room=:room", room=request.args.get("room"))
-    print(info)
+    getinfo = db.execute("SELECT username, score FROM users WHERE room=:room", room=request.args.get("room"))
+    info = dict()
+    for item in getinfo:
+        user = item["username"]
+        score = item["score"]
+        info[user] = score
+
     return jsonify(info)
 
 

@@ -23,7 +23,7 @@
               </tr>
                 {% endfor %}
             </table>
-            <div style="display:none">
+            <div id="choosecat" style="display:none">
                 <b><font>Kies een categorie voor de volgende vraag:</font></b>
                 <div class="choice" id="0" onclick="nextquestion(0)">Fractievoorzitters & Ministers</div>
                 <div class="choice" id="1" onclick="nextquestion(1)">Politiek Spectrum</div>
@@ -63,9 +63,12 @@
 
 
 
-    // Select all elements
-    // select all elements
-
+// select all elements
+const choosecat = document.getElementById("choosecat");
+const fractie = document.getElementById("0");
+const spectrum = document.getElementById("1");
+const geschiedenis = document.getElementById("2");
+const uitspraken = document.getElementById("3");
 const quiz = document.getElementById("quiz");
 const question = document.getElementById("question");
 const category = document.getElementById("category")
@@ -104,7 +107,8 @@ let score = 0;
         incorrect.style.display = "none";
     });
 
-var scores
+var scores;
+
 // Get scores from JSON
 function get_scores()
     {
@@ -117,9 +121,30 @@ function get_scores()
 // If loaded, render question
 function gotScores(data){
 
-    scores = data
-    alert("TEST 3 in gotScores, data=", scores)
-    loadnext(scores)
+    scores = data;
+    console.log(scores)
+    alert(scores)
+    var keys = Object.keys(scores);
+
+    // Select lowest score
+    var lowest = Math.min.apply(null, keys.map(function(x) {return scores[x]} ));
+    alert(lowest)
+
+    // Search for user with found lowest score
+    var match = keys.filter(function(y) {return scores[y] === lowest});
+    alert(match)
+
+    // Select user with lowest score
+    if (match > 1){
+        var nextuser = match[0]
+    }else{
+        var nextuser = match
+    }
+
+    // Let user with lowest score choose next category
+    if (nextuser == "{{ user }}"){
+        choosecat.style.display = "block";
+    }
 }
     // // Get scores from JSON
     // function get_scores()
@@ -300,11 +325,12 @@ function checkAnswer(answer){
     get_scores()
 
 
-function loadnext(scores){
-    scores = scores
-    alert("TEST 4 in loadnext", scores)
+// function loadnext(scores){
+//     alert("TEST 3,5 in loadnext")
+//     scores = scores;
+//     alert("TEST 4 in loadnext", scores)
 
-}
+// }
 
     // checkquestion()
 
