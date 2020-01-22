@@ -284,7 +284,7 @@ def ranking():
     if request.method == "GET":
 
         # get used room
-        room= "jemoeder"
+        room= "ranking"
 
         # get username and score using room out of db
         ranking = db.execute("SELECT username, score FROM users WHERE room = :room", room=room)
@@ -297,10 +297,13 @@ def ranking():
         for i in sortedranking:
                 i["rank"] = j
                 j += 1
-
+        print(ranking)
         # give dict to html
-        return render_template("ranking.html", ranking=sortedranking)
+        return render_template("ranking.html", ranking=sortedranking, user="d")
     else:
         return render_template("final.html")
 
-
+@app.route("/lost", methods=["GET", "POST"])
+def lost():
+    if request.method == "GET":
+        return render_template("lost.html")

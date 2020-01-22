@@ -8,24 +8,22 @@
 
     <div class="first-column">
         <div id="rcorners1">
-            <img src="static/minerva.jpg">
 
-            <!--<table class="table table-striped" style="width:100%">-->
-            <!--    <tr>-->
-            <!--        <th>Kamer</th>-->
-            <!--        <th>Gebruikers</th>-->
-            <!--        <th>Datum</th>-->
-            <!--    </tr>-->
-            <!--        {% for item in info %}-->
-            <!--    <tr>-->
-            <!--        <td>{{ item.room }}</td>-->
-            <!--        <td>{{ item.useramount}}</td>-->
-            <!--        <td>{{ item.dates }}</td>-->
-            <!--    </tr>-->
-            <!--        {% endfor %}-->
-            <!--</table>-->
+        <!-- if rank is number 1 or 2 show good gif-->
+         {% for item in ranking %}
+         {% if item["rank"] < 2 and item["username"]  == user %}
+        <img id="lekker" src="/static/happythierry.gif">
+         </img>
+         {% endif %}
+         {% endfor %}
 
-
+         <!--if rank is number 3 or higher show bad gif-->
+        {% for item in ranking %}
+         {% if item["rank"] > 2 and item["username"]  == user %}
+        <img id="jammer" src="/static/madthierry.gif">
+            </img>
+        {% endif %}
+         {% endfor %}
         </div>
     </div>
     <div class="second-column">
@@ -40,22 +38,31 @@
 
         </tr>
 
+            <!--show username score and rank in table-->
             {% for item in ranking %}
 
         <tr>
+
             <td> {{item["rank"]}} </td>
             <td>{{item["username"]}} </td>
             <td>{{item["score"]}} </td>
-            {% endfor %}
-            {% for item in ranking if item["rank"] < 3 %}
-            <td> <button class="btn btn-primary" type="submit" href="/final">Speel Finale! </button><br><br> </td>
 
-            {% endfor %}
+            <!--top 2 will play final-->
+            {% if item["rank"] < 3 and item["username"]  ==  user  %}
+            <td> <a  id="final"class="btn btn-primary" type="onclick" href="/final">Speel Finale! </a><br><br> </td>
+            {% endif %}
+            <!--no top 2 should be redirected to lost.html-->
+            {% if item["rank"] > 2 and item["username"]  == user %}
+            <td> <a  id="thanks"class="btn btn-primary" type="onclick" href="/lost">Dankje voor het spelen! </as><br><br> </td>
+            {% endif %}
+
+
+
              </tr>
 
+            {% endfor %}
 
             </div>
         </div>
     </div>
 {% endblock %}
-
