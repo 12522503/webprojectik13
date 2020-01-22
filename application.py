@@ -270,4 +270,32 @@ def checkquestion():
 
 
     # Return question index
+
     return jsonify(index)
+
+
+@app.route("/ranking", methods=["GET", "POST"])
+def ranking():
+    if request.method == "GET":
+
+        # get used room
+        room= "jemoeder"
+
+        # get username and score using room out of db
+        ranking = db.execute("SELECT username, score FROM users WHERE room = :room", room=room)
+
+        # sort dict using reverse
+        sortedranking = sorted(ranking, key=lambda x: int(x['score']), reverse=True)
+
+        # add ranking to dict
+        j = 1
+        for i in sortedranking:
+                i["rank"] = j
+                j += 1
+
+        # give dict to html
+        return render_template("ranking.html", ranking=sortedranking)
+    else:
+        return render_template("final.html")
+
+
