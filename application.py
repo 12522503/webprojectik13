@@ -186,6 +186,16 @@ def game():
     room=session["room"]
     questionamount = (db.execute("SELECT questions FROM rooms WHERE room=:room", room=room))[0]["questions"]
 
+    # User scores
+    room=session["room"]
+    getinfo = db.execute("SELECT username, score FROM users WHERE room=:room", room=room)
+    info = dict()
+    for item in getinfo:
+        user = item["username"]
+        score = item["score"]
+        info[user] = score
+
+
     # Get questions
     questiondata = db.execute("SELECT * FROM questions")
     questions = []
@@ -201,7 +211,7 @@ def game():
         qdict["pointsincorrect"] = line["pointsincorrect"]
         questions.append(qdict)
 
-    return render_template("game.html", user=session["user"], room=session["room"], questions=questions, amount=questionamount)
+    return render_template("game.html", user=session["user"], room=session["room"], questions=questions, amount=questionamount, scores=info)
 
 
 
@@ -284,7 +294,7 @@ def ranking():
     if request.method == "GET":
 
         # get used room
-        room= "jemoeder"
+        room= request.args.get("room")
 
         # get username and score using room out of db
         ranking = db.execute("SELECT username, score FROM users WHERE room = :room", room=room)
