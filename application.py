@@ -304,3 +304,30 @@ def ranking():
         return render_template("final.html")
 
 
+@app.route("/final", methods=["GET", "POST"])
+def final():
+    # Get information of room
+    room=session["room"]
+    getinfo = db.execute("SELECT username, score FROM users WHERE room=:room", room=room)
+    info = dict()
+    for item in getinfo:
+        user = item["username"]
+        score = item["score"]
+        info[user] = score
+    questionamount = (db.execute("SELECT questions FROM rooms WHERE room=:room", room=room))[0]["questions"]
+    # Get questions
+    questiondata = db.execute("SELECT * FROM questions")
+    questions = []
+    for line in questiondata:
+        qdict = dict()
+        qdict["question"] = line["question"]
+        qdict["category"] = line["category"]
+        qdict["correct"] = line["correctanswer"]
+        qdict["answer2"] = line["answer2"]
+        qdict["answer3"] = line["answer3"]
+        qdict["answer4"] = line["answer4"]
+        qdict["pointscorrect"] = line["pointscorrect"]
+        qdict["pointsincorrect"] = line["pointsincorrect"]
+        questions.append(qdict)
+
+    return render_template("final.html", user=session["user"], scores=info, room=session["room"], questions=questions, amount=questionamount)
