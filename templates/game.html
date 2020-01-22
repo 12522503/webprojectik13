@@ -92,7 +92,7 @@ const lastQuestion = {{ amount }} - 1;
 let numberQuestion = 0;
 let runningQuestion;
 let count = 0;
-const questionTime = 7; // 10s
+const questionTime = 10; // 10s
 const gaugeWidth = 550; // 150px
 const gaugeUnit = gaugeWidth / questionTime;
 let TIMER;
@@ -100,7 +100,6 @@ let score = 0;
 
 //   When page fully loaded
     jQuery(document).ready(function(){
-        alert("test");
         hide(0);
         startQuiz();
         correct.style.display = "none";
@@ -112,7 +111,6 @@ var scores;
 // Get scores from JSON
 function get_scores()
     {
-        alert("TEST 2 in get_scores")
         url= "/getscores?room=" + '{{ room }}';
         // If loaded, start gotData
         $.getJSON(url, gotScores)
@@ -123,16 +121,13 @@ function gotScores(data){
 
     scores = data;
     console.log(scores)
-    alert(scores)
     var keys = Object.keys(scores);
 
     // Select lowest score
     var lowest = Math.min.apply(null, keys.map(function(x) {return scores[x]} ));
-    alert(lowest)
 
     // Search for user with found lowest score
     var match = keys.filter(function(y) {return scores[y] === lowest});
-    alert(match)
 
     // Select user with lowest score
     if (match > 1){
@@ -146,6 +141,8 @@ function gotScores(data){
         choosecat.style.display = "block";
     }
 }
+
+
     // // Get scores from JSON
     // function get_scores()
     // {
@@ -209,6 +206,7 @@ function shuffle(array) {
 }
 
 function nextquestion(option){
+    choosecat.style.display = "none"
     url = "/question?cat=" + option;
     $.getJSON(url, function(data){
         if(data == true)
@@ -236,10 +234,10 @@ function gotData(data){
 
 // render a question
 function renderQuestion(index){
+
     runningQuestion = index;
     // alert(index)
     // runningQuestion = checkquestion()
-    alert(runningQuestion)
     hide(0);
     correct.style.display = "none";
     incorrect.style.display = "none";
@@ -277,6 +275,11 @@ function renderProgress(){
 }
 
 // counter render
+function sleep(){
+    setTimeout(function wait(){
+        alert("5 seconden gewacht")
+        checkquestion();}, 5000);
+}
 
 function renderCounter(){
     if(count <= questionTime){
@@ -288,10 +291,11 @@ function renderCounter(){
     }else{
         hide(0);
         count = 0;
-        alert(runningQuestion, lastQuestion)
         if(numberQuestion < lastQuestion){
-            runningQuestion++;
-            checkquestion();
+            numberQuestion++;
+            get_scores()
+            // Zet hier timer
+            sleep();
         }else{
             // end the quiz and show the score
             clearInterval(TIMER);
@@ -300,7 +304,7 @@ function renderCounter(){
     }
 }
 
-// checkAnwer
+// checkAnwer, triggered when clicked on answer
 
 function checkAnswer(answer){
     numberQuestion ++;
@@ -318,31 +322,9 @@ function checkAnswer(answer){
         // answerIsWrong();
         incorrect.style.display = "block";
     }
-    alert("TEST 0 in checkAnswer")
     hide(1);
     update_score("{{ user }}", score)
-    alert("TEST 1 before get_scores")
-    get_scores()
-
-
-// function loadnext(scores){
-//     alert("TEST 3,5 in loadnext")
-//     scores = scores;
-//     alert("TEST 4 in loadnext", scores)
-
-// }
-
-    // checkquestion()
-
-    // count = 0;
-    // if(runningQuestion < lastQuestion){
-    //     runningQuestion++;
-    //     renderQuestion();
-    // }else{
-    //     // end the quiz and show the score
-    //     clearInterval(TIMER);
-        // scoreRender();
-    // }
+    // get_scores()
 }
 
 // answer is correct

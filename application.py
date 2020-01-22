@@ -243,7 +243,7 @@ def updatescore():
 @app.route("/question")
 def question():
     # Choose questions with chosen category
-    number = request.args.get("cat")
+    number = int(request.args.get("cat"))
 
 
     # Choose random question within category
