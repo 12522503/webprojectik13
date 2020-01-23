@@ -304,6 +304,10 @@ function renderCounter(){
         wait.style.display = "block";
         clearInterval(TIMER)
         count = 0;
+
+        // Set random next question if user forgets to choose category
+        nextindex = Math.floor(Math.random() * 3);
+        nextquestion(nextindex)
         // Wait 5 seconds for next question
         setTimeout(function wait(){
             // remove category choice box and start new question
