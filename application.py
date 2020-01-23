@@ -296,7 +296,7 @@ def ranking():
         # get used room
         room= session["room"]
 
-        room= request.args.get("room")
+
 
 
         # get username and score using room out of db
@@ -312,7 +312,7 @@ def ranking():
                 j += 1
         print(ranking)
         # give dict to html
-        return render_template("ranking.html", ranking=sortedranking, user=session["user"])
+        return render_template("ranking.html", ranking=sortedranking, user=session["user")
     else:
         return render_template("final.html")
 
