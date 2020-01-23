@@ -42,6 +42,7 @@
         <div id="rcorners2">
             <div id="quiz" style="display: none">
                 <h2 id="question"></h2>
+                <h3 id="wait">Wachten op de volgende vraag...</h3></h3>
                 <small>Categorie: </small>
                 <h5 id="category"></h5><hr>
                 <font id="incorrect" color="red">Helaas, dat is fout!</font>
@@ -89,7 +90,8 @@ const progress = document.getElementById("progress");
 const scoreDiv = document.getElementById("scoreContainer");
 const correct = document.getElementById("correct");
 const incorrect = document.getElementById("incorrect");
-const questionno = document.getElementById("questionno")
+const questionno = document.getElementById("questionno");
+const wait = document.getElementById("wait");
 
 // get questions from database
 let questions = {{ questions | safe }}
@@ -166,6 +168,7 @@ function shuffle(array) {
 
 // start quiz, set timer for question
 function startQuiz(){
+    wait.style.display = "none";
     questionno.innerHTML = (numberQuestion + 1);
     checkquestion();
     quiz.style.display = "block";
@@ -298,6 +301,7 @@ function renderCounter(){
         // Clear TIMER and set counter back to 0
 
         hide(1)
+        wait.style.display = "block";
         clearInterval(TIMER)
         count = 0;
         // Wait 5 seconds for next question
