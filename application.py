@@ -249,6 +249,12 @@ def updatescore():
     db.execute("UPDATE users SET score = :update WHERE username=:user", update=update, user=user)
     return update
 
+@app.route("/getuserscore")
+def userscore():
+    user = request.args.get("userscore")
+    score = db.execute("SELECT score FROM users WHERE username=:user", user=user)
+    userscore=score["score"]
+    return jsonify(userscore)
 
 @app.route("/question")
 def question():

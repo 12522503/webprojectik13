@@ -23,7 +23,7 @@
                 {% for user, score in scores.items() %}
                     <tr>
                         <td>{{ user }}</td>
-                        <td>{{ score }}</td>
+                        <td id="userscore">0</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -92,6 +92,7 @@ const correct = document.getElementById("correct");
 const incorrect = document.getElementById("incorrect");
 const questionno = document.getElementById("questionno");
 const wait = document.getElementById("wait");
+const userscoreshow = document.getElementById("userscore");
 
 // get questions from database
 let questions = {{ questions | safe }}
@@ -178,6 +179,18 @@ function startQuiz(){
     // run every second
     TIMER = setInterval(renderCounter,1000); // 1000ms = 1s
 }
+
+var userscore;
+// Get user score
+function user_score()
+    {
+        url = "/getuserscore?user=" + '{{ user }}';
+        $.get(url, function(data){
+            userscore=data;
+            console.log(userscore)
+            userscoreshow.innerHTML = userscore
+        })
+    }
 
 var scores;
 
@@ -299,7 +312,7 @@ function renderCounter(){
     // if 10 seconds have passed (end question)
     }else{
         // Clear TIMER and set counter back to 0
-
+        user_score()
         hide(1)
         wait.style.display = "block";
         clearInterval(TIMER)
