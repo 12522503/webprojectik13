@@ -294,7 +294,7 @@ def ranking():
     if request.method == "GET":
 
         # get used room
-        room= session["room"]
+        room = session["room"]
 
 
 
@@ -304,7 +304,8 @@ def ranking():
 
         # sort dict using reverse
         sortedranking = sorted(ranking, key=lambda x: int(x['score']), reverse=True)
-
+        user=session["user"]
+        print(user)
         # add ranking to dict
         j = 1
         for i in sortedranking:
@@ -312,9 +313,9 @@ def ranking():
                 j += 1
         print(ranking)
         # give dict to html
-        return render_template("ranking.html", ranking=sortedranking, user=session["user")
-    else:
-        return render_template("final.html")
+        return render_template("ranking.html", ranking=sortedranking, user=session["user"])
+
+
 
 
 @app.route("/lost", methods=["GET", "POST"])
