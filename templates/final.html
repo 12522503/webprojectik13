@@ -88,12 +88,13 @@ let questions = {{ questions | safe }}
 const lastQuestion = {{ amount }} - 1;
 let numberQuestion = 0;
 let runningQuestion;
-let count = 0;
+let count = 10;
 const questionTime = 10; // 10s
 const gaugeWidth = 550; // 150px
 const gaugeUnit = gaugeWidth / questionTime;
 let TIMER;
 let score = 0;
+let filled = 0;
 
 ////////////////////////
 // HELPERS FUNCTIONS //
@@ -156,6 +157,7 @@ function shuffle(array) {
 
 // start quiz, set timer for question
 function startQuiz(){
+    filled = 0;
     wait.style.display = "none";
     questionno.innerHTML = (numberQuestion + 1);
     checkquestion();
@@ -277,10 +279,10 @@ function renderProgress(){
 }
 
 function renderCounter(){
-    if(count <= questionTime){
-        counter.innerHTML = count;
+    if(count > 0){
+        counter.innerHTML = count + "sec.";
         timeGauge.style.width = count * gaugeUnit + "px";
-        count++
+        count--
 
     // if 10 seconds have passed (end question)
     }else{
@@ -290,8 +292,9 @@ function renderCounter(){
         hide(1)
         wait.style.display = "block";
         clearInterval(TIMER)
-        count = 0;
+        count = 10;
         startQuiz()
+
 
         if(numberQuestion < lastQuestion){
             numberQuestion++;
@@ -309,6 +312,7 @@ function renderCounter(){
 // checkAnwer, triggered when clicked on answer
 
 function checkAnswer(answer){
+    filled = 1;
 
     if( answer == correctindex){
         // answer is correct
