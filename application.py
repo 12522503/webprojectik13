@@ -294,11 +294,10 @@ def ranking():
     if request.method == "GET":
 
         # get used room
-<<<<<<< HEAD
-        room= "ranking"
-=======
+        room= session["room"]
+
         room= request.args.get("room")
->>>>>>> 931b5c0ef3284f321785acd1393230e2f917cd14
+
 
         # get username and score using room out of db
         ranking = db.execute("SELECT username, score FROM users WHERE room = :room", room=room)
@@ -313,16 +312,16 @@ def ranking():
                 j += 1
         print(ranking)
         # give dict to html
-        return render_template("ranking.html", ranking=sortedranking, user="d")
+        return render_template("ranking.html", ranking=sortedranking, user=session["user"])
     else:
         return render_template("final.html")
 
-<<<<<<< HEAD
+
 @app.route("/lost", methods=["GET", "POST"])
 def lost():
     if request.method == "GET":
         return render_template("lost.html")
-=======
+
 
 @app.route("/final", methods=["GET", "POST"])
 def final():
@@ -351,4 +350,4 @@ def final():
         questions.append(qdict)
 
     return render_template("final.html", user=session["user"], scores=info, room=session["room"], questions=questions, amount=questionamount)
->>>>>>> 931b5c0ef3284f321785acd1393230e2f917cd14
+
