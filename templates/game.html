@@ -318,6 +318,7 @@ function renderCounter(){
         if(filled == 0){
             score = score - 50;
             update_score("{{ user }}", score)
+            userscoreshow.innerHTML = "Jouw score: " + score;
         }
 
 

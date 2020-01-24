@@ -8,7 +8,8 @@
 
     <div class="first-column">
         <div id="rcorners1">
-            <img src="static/minerva.jpg">
+            <img src="static/minerva.jpg"><br><br>
+            <img src="static/webprog.jpg">
 
             <!--<table class="table table-striped" style="width:100%">-->
             <!--    <tr>-->
@@ -37,13 +38,14 @@
                 <br>
                 <br>
                 <br>
-                <b><h4>Spel aanmaken</h4></b>
-                Eén persoon dient een kamer aan te maken. <br>De overige personen kiezen een gebruikersnaam en de kamer hieronder.<br><br>
+                <b><h4>Eén persoon dient een kamer aan te maken.</h4></b>
+                De host maakt een kamer aan en bepaalt het aantal vragen.<br><br>
+                <!--Eén persoon dient een kamer aan te maken. <br>De overige personen kiezen een gebruikersnaam en de kamer hieronder.<br><br>-->
                 <input type="button" onclick="location.href='/makeroom'" class="btn btn-primary" value="Kamer aanmaken" />
                 <br><br><br>
-                <b><h4>Een bestaande kamer kiezen</h4></b>
-                Vul een gebruikersnaam in en zoek de kamer waarin je wilt spelen.
-                <br><br>
+                <b><h4>De overige spelers kiezen de kamer hieronder.</h4></b>
+                Refresh de pagina als de kamer nog niet zichtbaar is in het keuzemenu.
+                <br>
                 <form class="form-inline" action="/" method="POST">
                     &nbsp;&nbsp;&nbsp;
                     <input type="text" class="form-control" id="username" placeholder="Gebruikersnaam" name="username"><br>
@@ -56,8 +58,9 @@
                             {% endfor %}
                         </select>
                     &nbsp;&nbsp;&nbsp;
-                    <button class="button2" type="submit">OK</button>
-                </form><br><br>
+                    <button class="button2" type="submit">OK</button><br><br><br><br><hr>
+                    <p>Wil je een singlesplayer spel spelen? Klik dan op kamer aanmaken en start direct het spel!</p>
+                </form>
             </div>
         </div>
     </div>
