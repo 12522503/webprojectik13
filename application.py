@@ -160,7 +160,7 @@ def inroom(host=False):
 
     # Return template with message
     return render_template("room.html", user=username, room=room, message=message, top=title, host=host, w=warning)
-cd web
+
 @app.route("/setready")
 def setready():
     room = request.args.get("room")
