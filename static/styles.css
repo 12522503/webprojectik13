@@ -254,27 +254,29 @@ body{
 
 .choice{
     border : 1px solid grey;
-    border-radius: 20px;
+    border-radius: 15px;
 }
 
 .choice:hover{
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
     border : 2px solid grey;
     font-weight: bold;
-=======
->>>>>>> 4e19dac7b5bcf6bf073ad42b269be755ca570ecd
     color: blue;
 }
 
 .choice:active{
     color: blue;
     border: 1.5px solid grey;
-<<<<<<< HEAD
-=======
->>>>>>> 88383455a62063146ac736c4dbbd616ed3c094a3
->>>>>>> 4e19dac7b5bcf6bf073ad42b269be755ca570ecd
+}
+
+.choice2{
+    border : 1px solid grey;
+    border-radius: 5px;
+}
+
+.choice2:hover{
+    border : 2px solid grey;
+    font-weight: bold;
+    color: blue;
 }
 
 #timer{

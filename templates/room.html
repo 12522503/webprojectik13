@@ -18,11 +18,12 @@
                 window.location.href = "/game";
             }
         });
-    });
+    }, 50);
     }
 
     // When page fully loaded
     jQuery(document).ready(function(){
+        // Player screens will check if game was set ready by host
         host = '{{ host }}'
         if (host == "no")
             check_if_ready();

@@ -76,7 +76,6 @@ def index():
         # Save username to database
         db.execute("INSERT INTO users (username, room) VALUES (:username, :room)",
                     username=username, room=room)
-
         # Update useramount in that room
         db.execute("UPDATE rooms SET useramount = useramount + 1 WHERE room= :roomname",
                     roomname=room)
@@ -88,13 +87,15 @@ def index():
 def makeroom():
     """Show start screen for website"""
 
+
+    # User reached route via POST (as by submitting a form via POST)
     if request.method == "GET":
         return render_template("makeroom.html")
 
     # User reached route via POST
     else:
-        # Request chosen category
         number = int(request.form.get("category"))
+        print("NUMBER= ", number, "TYPE: ", type(number))
 
         # Choose random question within category
         if number == 0:
@@ -107,19 +108,20 @@ def makeroom():
         if number == 3:
             index = random.randint(15,19)
 
+        # # Set question index in database
+        # db.execute("UPDATE rooms SET nextindex = :index WHERE room=:room", index=index, room=request.form.get("room"))
+
         # Get all variables
         roomname = request.form.get("room")
         questions = request.form.get("questions")
         username = request.form.get("username")
 
-        # Save session
         session["user"] = username
         session["room"] = roomname
 
         # Check if valid answer
         if not roomname and not username:
             return apology("Vul alles in om verder te gaan.")
-
         if not roomname:
             return apology("Vul een kamernaam in.")
 
@@ -129,7 +131,7 @@ def makeroom():
         if not username:
             return apology("Vul een gebruikersnaam in.")
 
-        # Insert room with questionindex for first question
+        # Insert room into rooms table
         db.execute("INSERT INTO rooms (room, useramount, dates, questions, nextindex) VALUES(:room, :useramount, :date, :q, :index)",
                     room=roomname, useramount=1, date=date.today(), q=int(questions), index=index)
 
@@ -141,15 +143,12 @@ def makeroom():
 
 @app.route("/room", methods=["GET", "POST"])
 def inroom(host=False):
-
-    # Message if player is host
+    # Check if user is host of game and pass message
     if host == True:
         host = "yes"
         message = "Jij bent momenteel host van deze kamer. \n Jij kiest dus wanneer het spel begint."
         title = "Spel starten..."
         warning = "Wanneer jij op SPEL STARTEN klikt wordt de kamer afgesloten en kan er dus niemand meer deelnemen."
-
-    # Message if player is no host
     else:
         host = "no"
         title = "Wachten totdat de host het spel start..."
@@ -158,9 +157,11 @@ def inroom(host=False):
     username = request.form.get("username")
     room = (db.execute("SELECT room FROM users WHERE username=:user", user=username))[0]["room"]
 
-    # Return template with message
-    return render_template("room.html", user=username, room=room, message=message, top=title, host=host, w=warning)
-cd web
+    if request.method == "GET":
+        return render_template("room.html", user=username, room=room, message=message, top=title, host=host, w=warning)
+    else:
+        return render_template("room.html", user=username, room=room, message=message, top=title, host=host, w=warning)
+
 @app.route("/setready")
 def setready():
     room = request.args.get("room")
@@ -302,6 +303,9 @@ def ranking():
         # get used room
         room = session["room"]
 
+
+
+
         # get username and score using room out of db
         ranking = db.execute("SELECT username, score FROM users WHERE room = :room", room=room)
 
@@ -314,7 +318,7 @@ def ranking():
         for i in sortedranking:
                 i["rank"] = j
                 j += 1
-
+        print(ranking)
         # give dict to html
         return render_template("ranking.html", ranking=sortedranking, user=session["user"])
 
@@ -325,7 +329,6 @@ def ranking():
 def lost():
     if request.method == "GET":
         return render_template("lost.html")
-
 
 
 @app.route("/final", methods=["GET", "POST"])
@@ -356,30 +359,3 @@ def final():
 
     return render_template("final.html", user=session["user"], scores=info, room=session["room"], questions=questions, amount=questionamount)
 
-@app.route("/finalroom", methods=["GET", "POST"])
-def finalroom():
-    if request.method == "GET":
-        room = session["room"]
-        # get username and score using room out of db
-        ranking = db.execute("SELECT username, score FROM users WHERE room = :room", room=room)
-
-        # sort dict using reverse
-        sortedranking = sorted(ranking, key=lambda x: int(x['score']), reverse=True)
-        user=session["user"]
-        print(user)
-        # add ranking to dict
-        j = 1
-        for i in sortedranking:
-                i["rank"] = j
-                j += 1
-
-        # give dict to html
-        return render_template("finalroom.html", ranking=sortedranking, user=session["user"])
-    if request.method == "POST":
-
-        return render_template("final.html")
-
-@app.route("/winner", methods=["GET", "POST"])
-def winner():
-     if request.method == "GET":
-         return render_template("winner.html")
