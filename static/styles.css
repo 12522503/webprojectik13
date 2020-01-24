@@ -40,6 +40,9 @@ main
 
     /* center contents */
     text-align: center;
+
+    /*Makes sure footer stays in right place*/
+    min-height: 100vh;
 }
 
 main img
