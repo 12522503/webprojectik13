@@ -43,6 +43,10 @@ db = SQL("sqlite:///webproject.db")
 def index():
     """Show start screen for website"""
 
+    # Remove all gamerooms older than 1 day
+    currentdate = str(date.today())
+    db.execute("DELETE FROM rooms WHERE dates != :now", now=currentdate)
+
     if request.method == "GET":
 
         # Select roomgames which haven't been started yet
@@ -70,8 +74,8 @@ def index():
 
         # Check if username already exists
         usernames = db.execute("SELECT * FROM users WHERE username = :username", username=username)
-        if usernames == 1:
-            return apology("Gebruikersnaam is al gebruikt")
+        if usernames:
+            return apology("Gebruikersnaam wordt al gebruikt, ga terug en kies een andere naam om te spelen.")
 
         # Save username to database
         db.execute("INSERT INTO users (username, room) VALUES (:username, :room)",
@@ -128,6 +132,16 @@ def makeroom():
 
         if not username:
             return apology("Vul een gebruikersnaam in.")
+
+        # Check if username already exists
+        usernames = db.execute("SELECT * FROM users WHERE username = :username", username=username)
+        if usernames:
+            return apology("Gebruikersnaam wordt al gebruikt, ga terug en kies een andere naam om te spelen.")
+
+        # Check if username already exists
+        roomnames = db.execute("SELECT * FROM rooms WHERE room = :roomname", roomname=roomname)
+        if roomnames:
+            return apology("Kamernaam al in gebruik. Ga terug en kies een andere naam om te spelen!")
 
         # Insert room with questionindex for first question
         db.execute("INSERT INTO rooms (room, useramount, dates, questions, nextindex) VALUES(:room, :useramount, :date, :q, :index)",
