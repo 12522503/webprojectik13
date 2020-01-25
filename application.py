@@ -316,9 +316,6 @@ def ranking():
         # get used room
         room = session["room"]
 
-
-
-
         # get username and score using room out of db
         ranking = db.execute("SELECT username, score FROM users WHERE room = :room", room=room)
 
@@ -331,7 +328,7 @@ def ranking():
         for i in sortedranking:
                 i["rank"] = j
                 j += 1
-        print(ranking)
+
         # give dict to html
         return render_template("ranking.html", ranking=sortedranking, user=session["user"])
 
@@ -342,6 +339,7 @@ def ranking():
 def lost():
     if request.method == "GET":
         return render_template("lost.html")
+
 
 
 @app.route("/final", methods=["GET", "POST"])
@@ -372,3 +370,38 @@ def final():
 
     return render_template("final.html", user=session["user"], scores=info, room=session["room"], questions=questions, amount=questionamount)
 
+@app.route("/finalroom", methods=["GET", "POST"])
+def finalroom():
+    if request.method == "GET":
+         # get used room
+        room = session["room"]
+
+        # get username and score using room out of db
+        ranking = db.execute("SELECT username, score FROM users WHERE room = :room", room=room)
+
+        # sort dict using reverse
+        sortedranking = sorted(ranking, key=lambda x: int(x['score']), reverse=True)
+        user=session["user"]
+        print(user)
+        # add ranking to dict
+        j = 1
+        for i in sortedranking:
+                i["rank"] = j
+                j += 1
+
+        # insure only number 1 & 2 can get into final
+        for item in ranking:
+            if (user == item["username"] and item["rank"] == 1) or (user == item["username"] and item["rank"] == 2):
+
+                return render_template("finalroom.html", ranking=ranking)
+            else:
+                return apology("Niet bevoegd voor finale", 400)
+
+    if request.method == "POST":
+
+        return render_template("final.html")
+
+@app.route("/winner", methods=["GET", "POST"])
+def winner():
+     if request.method == "GET":
+         return render_template("winner.html")

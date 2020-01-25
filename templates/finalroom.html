@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Finalroom
+{% endblock %}
+
+{% block main %}
+
+<div id="rcorners3">
+    <h1>Welkom in de Finale!</h1>
+    <h2> De eerste plek mag het spel starten. <br> <b> Zorg er wel voor dat jullie allebei op deze pagina zijn! </b></h2>
+    <br>
+
+
+
+    <form name="final"></form>
+     {% for item in ranking %}
+          {% if item["rank"] == 1 and item["username"]  ==  user %}
+        <a class="btn btn-primary" href="/final" type="submit" onclick=ready()>Spel starten</a><br><br>
+
+    {% endif %}
+    {% endfor %}
+    </form>
+    <img src="static/Spinner-1s-200px (1).gif">
+
+</div>
+{% endblock %}

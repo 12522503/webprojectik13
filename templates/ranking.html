@@ -11,7 +11,7 @@
 
         <!-- if rank is number 1 or 2 show good gif-->
          {% for item in ranking %}
-         {% if item["rank"] < 2 and item["username"]  == user %}
+         {% if item["rank"] < 3 and item["username"]  == user %}
         <img id="lekker" src="/static/happythierry.gif">
          </img>
          {% endif %}
@@ -38,7 +38,7 @@
 
         </tr>
 
-            <!--show username score and rank in table-->
+            <!--show username score and rank in table by looping through list with dicts-->
             {% for item in ranking %}
 
         <tr>
@@ -50,8 +50,8 @@
 
 
             <!--top 2 will play final-->
-            {% if item["rank"] < 3 and item["username"]  ==  user  %}
-            <td> <a  id="final"class="btn btn-primary" type="onclick" href="/final">Speel Finale! </a><br><br> </td>
+            {% if item["rank"] < 3 and item["username"]  ==  user %}
+            <td> <a  id="final"class="btn btn-primary" type="onclick" href="/finalroom">Speel Finale! </a><br><br> </td>
             {% endif %}
             <!--no top 2 should be redirected to lost.html-->
             {% if item["rank"] > 2 and item["username"]  == user %}
