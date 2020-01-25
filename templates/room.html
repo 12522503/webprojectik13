@@ -31,8 +31,9 @@
     <div id="loading" >aan het laden...</div><br><br>
 
 
-
-    <img src="static/Spinner-1s-200px (1).gif">
+    {% if host == "no" %}
+        <img src="static/Spinner-1s-200px (1).gif">
+    {% endif %}
 
 </div>
 <script>
