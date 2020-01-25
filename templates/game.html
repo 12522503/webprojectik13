@@ -26,7 +26,7 @@
             <div id="choosecat" style="display:none">
                 <b><font>Kies een categorie voor de volgende vraag:</font></b>
                 <p>Jij hebt momenteel het minst aantal punten en kan dus de categorie van de volgende vraag bepalen. </p>
-                <font color="red"> Als je niet binnen 5 seconden een categorie kiest wordt de volgende vraag random gekozen!</font><br>
+                <font color="red"> Als je niet binnen 10 seconden een categorie kiest wordt de volgende vraag random gekozen!</font><br>
                 <div class="choice2" id="0" onclick="nextquestion(0)">Fractievoorzitters & Ministers</div><br>
                 <div class="choice2" id="1" onclick="nextquestion(1)">Politiek Spectrum</div><br>
                 <div class="choice2" id="2" onclick="nextquestion(2)">Geschiedenis</div><br>
@@ -93,8 +93,8 @@ let questions = {{ questions | safe }}
 const lastQuestion = {{ amount }} - 1;
 let numberQuestion = 0;
 let runningQuestion;
-let count = 10;
-const questionTime = 10; // 10s
+let count = 20;
+const questionTime = 20; // 20s
 const gaugeWidth = 550; // 150px
 const gaugeUnit = gaugeWidth / questionTime;
 let TIMER;
@@ -303,7 +303,7 @@ function renderCounter(){
         timeGauge.style.width = count * gaugeUnit + "px";
         count--
 
-    // if 10 seconds have passed (end question)
+    // if 20 seconds have passed (end question)
     }else{
 
         quiz.style.display = "none";
@@ -312,7 +312,7 @@ function renderCounter(){
         hide(1)
         wait.style.display = "block";
         clearInterval(TIMER)
-        count = 10;
+        count = 20;
 
         // If user didn't choose an option
         if(filled == 0){
@@ -324,11 +324,11 @@ function renderCounter(){
         // Set random next question if user forgets to choose category
         nextindex = Math.floor(Math.random() * 3);
         nextquestion(nextindex)
-        // Wait 5 seconds for next question
+        // Wait 10 seconds for next question
         setTimeout(function wait(){
             // remove category choice box and start new question
             choosecat.style.display = "none";
-            startQuiz();}, 7000);
+            startQuiz();}, 10000);
 
         if(numberQuestion < lastQuestion){
             numberQuestion++;

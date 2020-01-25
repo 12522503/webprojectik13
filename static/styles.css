@@ -40,6 +40,9 @@ main
 
     /* center contents */
     text-align: center;
+
+    /*Makes sure footer stays in right place*/
+    min-height: 100vh;
 }
 
 main img
@@ -210,7 +213,7 @@ body{
 }
 
 .footer {
-  position: fixed;
+  position: relative;
   left: 0;
   bottom: 0;
   width: 100%;

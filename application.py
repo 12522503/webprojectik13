@@ -160,6 +160,7 @@ def inroom(host=False):
 
     # Return template with message
     return render_template("room.html", user=username, room=room, message=message, top=title, host=host, w=warning)
+
 @app.route("/setready")
 def setready():
     room = request.args.get("room")
@@ -358,7 +359,9 @@ def final():
 @app.route("/finalroom", methods=["GET", "POST"])
 def finalroom():
     if request.method == "GET":
+         # get used room
         room = session["room"]
+
         # get username and score using room out of db
         ranking = db.execute("SELECT username, score FROM users WHERE room = :room", room=room)
 
@@ -372,8 +375,14 @@ def finalroom():
                 i["rank"] = j
                 j += 1
 
-        # give dict to html
-        return render_template("finalroom.html", ranking=sortedranking, user=session["user"])
+        # insure only number 1 & 2 can get into final
+        for item in ranking:
+            if (user == item["username"] and item["rank"] == 1) or (user == item["username"] and item["rank"] == 2):
+
+                return render_template("finalroom.html", ranking=ranking)
+            else:
+                return apology("Niet bevoegd voor finale", 400)
+
     if request.method == "POST":
 
         return render_template("final.html")
