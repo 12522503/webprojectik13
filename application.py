@@ -405,3 +405,27 @@ def finalroom():
 def winner():
      if request.method == "GET":
          return render_template("winner.html")
+
+@app.route("/userready")
+def userready():
+    arg = request.args.get("arg")
+
+    # Set user ready for game
+    if arg == "set":
+        db.execute("UPDATE users SET ready = :ready WHERE username = :user", ready=1, username=session["user"])
+
+    # Check if all users are ready for game
+    else:
+        users = db.execute("SELECT * FROM users WHERE room=:room", room=session["room"])
+        users_ready = db.execute("SELECT * FROm useres WHERE ready=:ready", ready=1)
+
+        # If all users are ready to play
+        if len(users) == len(users_ready):
+            return jsonify(True)
+        # If not
+        else:
+            return jsonify(False)
+
+
+
+
