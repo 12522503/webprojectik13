@@ -409,22 +409,31 @@ def winner():
 @app.route("/userready")
 def userready():
     arg = request.args.get("arg")
+    usr = session["user"]
+    print("USER: ", usr)
 
     # Set user ready for game
     if arg == "set":
-        db.execute("UPDATE users SET ready = :ready WHERE username = :user", ready=1, username=session["user"])
+        db.execute("UPDATE users SET ready = :ready WHERE username = :user", ready=1, user=session["user"])
+        return jsonify(True)
 
     # Check if all users are ready for game
-    else:
+    if arg == "check":
         users = db.execute("SELECT * FROM users WHERE room=:room", room=session["room"])
-        users_ready = db.execute("SELECT * FROm useres WHERE ready=:ready", ready=1)
+        users_ready = db.execute("SELECT * FROM users WHERE ready=:ready AND room=:room", ready=1, room=session["room"])
 
         # If all users are ready to play
         if len(users) == len(users_ready):
+            print("READY")
             return jsonify(True)
+
         # If not
         else:
+            print(users_ready)
+            print("ready:", len(users_ready), "users:", len(users))
+            print("NOT READY")
             return jsonify(False)
+
 
 
 

@@ -155,10 +155,13 @@ function shuffle(array) {
 //  When page fully loaded
     jQuery(document).ready(function(){
         hide(0);
-        startQuiz();
         correct.style.display = "none";
         incorrect.style.display = "none";
+        startQuiz();
+
     });
+
+
 
 // start quiz, set timer for question
 function startQuiz(){
