@@ -138,7 +138,7 @@ def makeroom():
         if usernames:
             return apology("Gebruikersnaam wordt al gebruikt, ga terug en kies een andere naam om te spelen.")
 
-        # Check if username already exists
+        # Check if roomname already exists
         roomnames = db.execute("SELECT * FROM rooms WHERE room = :roomname", roomname=roomname)
         if roomnames:
             return apology("Kamernaam al in gebruik. Ga terug en kies een andere naam om te spelen!")
@@ -150,30 +150,13 @@ def makeroom():
         # Insert user into users table
         db.execute("INSERT INTO users (username, room, fifty, double, joker, score, ready) VALUES(:name, :room, :f, :d, :j, :s, :r)",
                     name=username, room=roomname, f=1, d=1, j=1, s=1, r=0)
-        return inroom(True)
+        return inroom()
 
 
 @app.route("/room", methods=["GET", "POST"])
-def inroom(host=False):
-
-    # Message if player is host
-    if host == True:
-        host = "yes"
-        message = "Jij bent momenteel host van deze kamer. \n Jij kiest dus wanneer het spel begint."
-        title = "Spel starten..."
-        warning = "Wanneer jij op SPEL STARTEN klikt wordt de kamer afgesloten en kan er dus niemand meer deelnemen."
-
-    # Message if player is no host
-    else:
-        host = "no"
-        title = "Wachten totdat de host het spel start..."
-        message = "Momenteel is het mogelijk voor andere spelers om de kamer te betreden. Wanneer de host het spel start wordt de kamer gesloten."
-        warning = "Nadat de host op SPEL STARTEN heeft gedrukt kan dit maximaal 5 seconden duren."
-    username = request.form.get("username")
-    room = (db.execute("SELECT room FROM users WHERE username=:user", user=username))[0]["room"]
-
+def inroom():
     # Return template with message
-    return render_template("room.html", user=username, room=room, message=message, top=title, host=host, w=warning)
+    return render_template("room.html", user=session["user"], room=session["room"])
 
 @app.route("/setready")
 def setready():
@@ -414,7 +397,7 @@ def userready():
 
     # Set user ready for game
     if arg == "set":
-        db.execute("UPDATE users SET ready = :ready WHERE username = :user", ready=1, user=session["user"])
+        db.execute("UPDATE users SET ready = :ready WHERE username = :user", ready=1, user=usr)
         return jsonify(True)
 
     # Check if all users are ready for game
@@ -429,7 +412,7 @@ def userready():
 
         # If not
         else:
-            print(users_ready)
+            print(users)
             print("ready:", len(users_ready), "users:", len(users))
             print("NOT READY")
             return jsonify(False)

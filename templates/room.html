@@ -13,13 +13,10 @@
     <b><font color="blue">{{ user }}</font></b>
     <a> in de kamer</a>
     <b><font color="blue">{{ room }}</font><br><br><br>
-    <!--{{ message }}</b><br>-->
-    <!--<b><font color="red">{{ w }}</font><br><br><br>-->
+
 
     <form id="readybutton" name="startgame"></form>
-    <!--{% if host == "yes" %}-->
-        <button id="button" class="btn btn-primary" type="submit" onclick="userready()";>Spel starten</button>
-    <!--{% endif %}-->
+        <button id="button" class="btn btn-primary" onclick="userready()";>Spel starten</button>
     </form>
     <b><font id="ready" style="display:none" color="green">Wachten tot alle gebruikers klaar zijn om te spelen...</font></b><br><br>
 
@@ -33,26 +30,11 @@
     <div id="loading" >even geduld s.v.p. Spelopbouw aan het laden...</div><br><br>
 
 
-    <!--{% if host == "no" %}-->
-    <!--    <img src="static/Spinner-1s-200px (1).gif">-->
-    <!--{% endif %}-->
+
 
 </div>
 <script>
-    // // Check if game is ready (set by host)
-    // function check_if_ready(){
-    //   time=setInterval(function()
-    // {
-    //     url = "/check?room=" + '{{ room }}';
-    //     $.get(url, function(data) {
-    //         // If ready, redirect to game
-    //         if (data == true)
-    //         {
-    //             window.location.href = "/game";
-    //         }
-    //     });
-    // }, 50);
-    // }
+
 const button = document.getElementById("button");
 const ready = document.getElementById("ready");
 // Register user as "ready for game" in database
@@ -84,27 +66,12 @@ function gameready(){
         });
     }, 50);
     }
-    // When page fully loaded
+    //When page fully loaded
     jQuery(document).ready(function(){
-        // Player screens will check if game was set ready by host
-        host = '{{ host }}'
-        if (host == "no")
-            check_if_ready();
             text();
     });
 
-    // // Set game ready (host) and redirect to gamepage
-    // function ready()
-    // {
-    //     url= "/setready?room=" + '{{ room }}';
-    //     $.get(url, function(data) {
-    //         if (data == true)
-    //         {
-    //             window.location.href = "/game";
-    //         }
-    //     });
 
-    // }
 
     let count = -1;
     const text1 = document.getElementById("text1");
