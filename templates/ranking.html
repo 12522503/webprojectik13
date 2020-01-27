@@ -67,4 +67,18 @@
             </div>
         </div>
     </div>
+    <script>
+    function userready(){
+        url = "/userready?arg=reset";
+            $.get(url, function(data){
+            if (data == true)
+            {}
+        })
+    }
+
+
+    jQuery(document).ready(function(){
+        userready()
+    });
+    </script>
 {% endblock %}

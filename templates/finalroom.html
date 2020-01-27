@@ -8,20 +8,51 @@
 
 <div id="rcorners3">
     <h1>Welkom in de Finale!</h1>
-    <h2> De eerste plek mag het spel starten. <br> <b> Zorg er wel voor dat jullie allebei op deze pagina zijn! </b></h2>
+    <p> Klik op finale starten als je klaar bent om te spelen. <br> <b> Als jij en je tegenstander beide klaar zijn begint de finale! </b></p>
     <br>
+    <b><font color="green" id="ready" style="display:none">Wachten op tegenstander...</font></b>
+
+    <form id="readybutton" name="startgame"></form>
+        <button id="button" class="btn btn-primary" onclick="userready()";>Finale starten</button>
+    </form><br><br>
 
 
-
-    <form name="final"></form>
-     {% for item in ranking %}
-          {% if item["rank"] == 1 and item["username"]  ==  user %}
-        <a class="btn btn-primary" href="/final" type="submit" onclick=ready()>Spel starten</a><br><br>
-
-    {% endif %}
-    {% endfor %}
-    </form>
-    <img src="static/Spinner-1s-200px (1).gif">
+     <img src="static/Spinner-1s-200px (1).gif">
 
 </div>
+<script>
+
+const button = document.getElementById("button");
+const ready = document.getElementById("ready");
+
+// Register user as "ready for game" in database
+function userready(){
+    url = "/userready?arg=set";
+    $.get(url, function(data){
+        if (data == true)
+        {
+            button.style.display = "none";
+            ready.style.display = "block";
+            gameready();
+        }
+    })
+}
+
+// Check if all users are ready to play
+function gameready(){
+       readytimer=setInterval(function()
+    {
+        url = "/userready?arg=checkfinal";
+        $.get(url, function(data) {
+            // If ready, start game
+            if (data == true)
+            {
+                clearInterval(readytimer);
+                window.location.href = "/final"
+
+            }
+        });
+    }, 50);
+    }
+</script>
 {% endblock %}

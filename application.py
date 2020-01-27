@@ -355,34 +355,8 @@ def final():
 
 @app.route("/finalroom", methods=["GET", "POST"])
 def finalroom():
-    if request.method == "GET":
-         # get used room
-        room = session["room"]
+    return render_template("finalroom.html")
 
-        # get username and score using room out of db
-        ranking = db.execute("SELECT username, score FROM users WHERE room = :room", room=room)
-
-        # sort dict using reverse
-        sortedranking = sorted(ranking, key=lambda x: int(x['score']), reverse=True)
-        user=session["user"]
-        print(user)
-        # add ranking to dict
-        j = 1
-        for i in sortedranking:
-                i["rank"] = j
-                j += 1
-
-        # insure only number 1 & 2 can get into final
-        for item in ranking:
-            if (user == item["username"] and item["rank"] == 1) or (user == item["username"] and item["rank"] == 2):
-
-                return render_template("finalroom.html", ranking=ranking)
-            else:
-                return apology("Niet bevoegd voor finale", 400)
-
-    if request.method == "POST":
-
-        return render_template("final.html")
 
 @app.route("/winner", methods=["GET", "POST"])
 def winner():
@@ -415,6 +389,18 @@ def userready():
             print(users)
             print("ready:", len(users_ready), "users:", len(users))
             print("NOT READY")
+            return jsonify(False)
+
+    if arg == "reset":
+        db.execute("UPDATE users SET ready = :ready WHERE username =:user", ready=0, user=usr)
+        return jsonify(True)
+
+    if arg == "checkfinal":
+        users_ready = db.execute("SELECT * FROM users WHERE ready=:ready AND room=:room", ready=1, room=session["room"])
+
+        if len(users_ready) == 2:
+            return jsonify(True)
+        else:
             return jsonify(False)
 
 
