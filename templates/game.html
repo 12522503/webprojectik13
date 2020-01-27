@@ -13,6 +13,10 @@
             <hr>
             <h6 id="questionno">vraag</h6>
             <div id="userscore">Jouw score: 0 </div>
+            <div><br></div>
+            <div id="joker" onclick="joker">
+                <img class="joker" src="/static/verdubbelaar.jpg" style="width:100%;"></img><br>Joker
+            </div>
         </div>
     </div>
     <div class="second-column">
@@ -63,6 +67,7 @@
 
 
 // select all elements
+const joker = document.getElementById("joker");
 const choosecat = document.getElementById("choosecat");
 const fractie = document.getElementById("0");
 const spectrum = document.getElementById("1");
@@ -378,7 +383,15 @@ function answerIsWrong(){
     document.getElementById(runningQuestion).style.backgroundColor = "#f00";
 }
 
-
+// Lets user make us of joker
+joker.onclick = function(){
+    filled = 1;
+    hide(1);
+    score = score + (questions[runningQuestion]).pointscorrect;
+    update_score("{{ user }}", score);
+    userscoreshow.innerHTML = "Jouw score: " + score;
+    joker.style.display = "none";
+}
 
 
 
