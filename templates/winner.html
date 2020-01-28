@@ -8,47 +8,9 @@
 
 <div id="rcorners3">
     <h1>You are the champion!</h1>
-<<<<<<< HEAD
-    <h3> Speel nog een keer om je kennis meer te testen en vergroten!  <a class="btn btn-primary" type="onclick" href="/">Spel starten! </a>
-</h3> <br>
-
-
-
-    <img src="/static/champion.gif">
-         </img>
-         <br>
-
-         <form action="/winner" method="POST">
-        <textarea rows="6" cols="70" placeholder="Schrijf je review hier!" name="review" rows="4" cols="50">
-
-
-        </textarea>
-
-=======
-    <h3> Speel nog een keer om je kennis meer te testen en vergroten!  <a class="btn btn-primary" type="onclick" href="/">Spel starten!</a></h3><br>
+    <h3> Speel nog een keer om je kennis meer te testen en vergroten! <br><br> <a class="btn btn-primary" type="onclick" href="/">Spel starten! </a></h3><br>
     <img src="/static/champion.gif"></img><br>
 </div>
->>>>>>> 52f4bb469bb53fbb9fe150f457efbcf77a6defc9
-
-       <button class="btn btn-primary" Onclick="hideandshow()" type="submit">Submit review</button>
-     </form>
-    <div style="display:none" id="show">
-      <font color="green"> <b>  Bedankt voor de Review! Check de reviews <a href="/review"> hier </a> </b> </font>
-    </div>
-
-<script>
-function hideandshow() {
-  var i = document.getElementById("show");
-  if (i.style.display === "none") {
-    i.style.display = "block";
-  } else {
-    i.style.display = "none";
-  }
-}
-  jQuery(document).ready(function(){
-        hideandshow()
-    });
-</script>
 
 
 {% endblock %}
