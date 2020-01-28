@@ -322,6 +322,23 @@ def ranking():
 def lost():
     if request.method == "GET":
         return render_template("lost.html")
+    if request.method == "POST":
+
+        reviews = request.form.get("review")
+        db.execute("UPDATE users SET review = :review WHERE username = :user",
+        review = reviews, user=session["user"])
+        print(review)
+        return render_template("lost.html")
+
+
+@app.route("/review", methods=["GET", "POST"])
+def review():
+    if request.method == "GET":
+        getinfo = db.execute("SELECT username, review FROM users")
+        print(getinfo)
+        return render_template("review.html", reviews=getinfo)
+
+
 
 
 

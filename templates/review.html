@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Review
+{% endblock %}
+
+{% block main %}
+
+        <!--loop list with dicts-->
+       {% for item in reviews %}
+       <!--if review is not empty-->
+           {% if item["review"] %}
+           <div class="second-column">
+        <div id="rcorners1">
+            <div class="blocktext">
+                <!--show review per user-->
+                <p> Review van: <font color="blue"> <b>{{ item["username"] }} </font> </b> </p>
+                <p> <b> {{ item["review"] }} </b></p>
+        </div>
+        </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+
+        </div>
+
+{% endblock %}

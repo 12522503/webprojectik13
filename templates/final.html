@@ -1,40 +1,40 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Final
+    Spel
 {% endblock %}
 
 {% block main %}
 
     <div class="first-column">
         <div id="rcorners1">
-            <large><font align="left" color="blue">Jij: {{ user }}</font><br></large>
+            <large><font align="left" color="blue">Gebruikersnaam: {{ user }}</font><br></large>
             <h5>Kamer: {{ room }}</h5>
             <hr>
-            <h6>Vraag</h6><div id="questionno">1</div>
-            <table class="table table-striped" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Speler</th>
-                        <th>Score</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for user, score in scores.items() %}
-                    <tr>
-                        <td>{{ user }}</td>
-                        <td>{{ score }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            <h6 id="questionno">vraag</h6>
+            <div id="userscore">Jouw score: 0 </div>
         </div>
     </div>
     <div class="second-column">
         <div id="rcorners2">
+            <div id ="wait">
+                <h3>Wachten op de volgende vraag...</h3>
+                <img src="static/30.gif">
+                <br><br><br>
+            </div>
+
+            <div id="choosecat" style="display:none">
+                <b><font>Kies een categorie voor de volgende vraag:</font></b>
+                <p>Jij hebt momenteel het minst aantal punten en kan dus de categorie van de volgende vraag bepalen. </p>
+                <font color="red"> Als je niet binnen 10 seconden een categorie kiest wordt de volgende vraag random gekozen!</font><br>
+                <div class="choice2" id="0" onclick="nextquestion(0)">Fractievoorzitters & Ministers</div><br>
+                <div class="choice2" id="1" onclick="nextquestion(1)">Politiek Spectrum</div><br>
+                <div class="choice2" id="2" onclick="nextquestion(2)">Geschiedenis</div><br>
+                <div class="choice2" id="3" onclick="nextquestion(3)">Uitspraken</div><br>
+            </div>
             <div id="quiz" style="display: none">
                 <h2 id="question"></h2>
-                <h3 id="wait">Wachten op de volgende vraag...</h3></h3>
+
                 <small>Categorie: </small>
                 <h5 id="category"></h5><hr>
                 <font id="incorrect" color="red">Helaas, dat is fout!</font>
@@ -59,7 +59,11 @@
     <script>
 
 
+
+
+
 // select all elements
+const choosecat = document.getElementById("choosecat");
 const fractie = document.getElementById("0");
 const spectrum = document.getElementById("1");
 const geschiedenis = document.getElementById("2");
@@ -80,16 +84,17 @@ const correct = document.getElementById("correct");
 const incorrect = document.getElementById("incorrect");
 const questionno = document.getElementById("questionno");
 const wait = document.getElementById("wait");
+const userscoreshow = document.getElementById("userscore");
 
 // get questions from database
 let questions = {{ questions | safe }}
 
 
-const lastQuestion = {{ amount }} - 1;
+const lastQuestion = 100;
 let numberQuestion = 0;
 let runningQuestion;
-let count = 10;
-const questionTime = 10; // 10s
+let count = 20;
+const questionTime = 20; // 20s
 const gaugeWidth = 550; // 150px
 const gaugeUnit = gaugeWidth / questionTime;
 let TIMER;
@@ -150,18 +155,20 @@ function shuffle(array) {
 //  When page fully loaded
     jQuery(document).ready(function(){
         hide(0);
-        startQuiz();
         correct.style.display = "none";
         incorrect.style.display = "none";
+        startQuiz();
+
     });
+
+
 
 // start quiz, set timer for question
 function startQuiz(){
     filled = 0;
     wait.style.display = "none";
-    questionno.innerHTML = (numberQuestion + 1);
+    questionno.innerHTML = "vraag " + (numberQuestion + 1) + " van " + '{{ amount }}';
     checkquestion();
-    quiz.style.display = "block";
     renderProgress();
     renderCounter();
 
@@ -169,10 +176,19 @@ function startQuiz(){
     TIMER = setInterval(renderCounter,1000); // 1000ms = 1s
 }
 
+var userscore;
+// Get user score
+function user_score()
+    {
+        url = "/getuserscore?user=" + '{{ user }}';
+        $.get(url, function(data){
+            userscore=data;
+            console.log(userscore)
+            userscoreshow.innerHTML = userscore
+        })
+    }
+
 var scores;
-
-
-
 
 // Get scores from JSON
 function get_scores()
@@ -202,6 +218,10 @@ function gotScores(data){
         var nextuser = match
     }
 
+    // Let user with lowest score choose next category
+    if (nextuser == "{{ user }}"){
+        choosecat.style.display = "block";
+    }
 }
 
 
@@ -217,6 +237,7 @@ function gotScores(data){
 
 
 function nextquestion(option){
+    choosecat.style.display = "none"
     url = "/question?cat=" + option;
     $.getJSON(url, function(data){
         if(data == true)
@@ -238,6 +259,7 @@ function checkquestion()
 function gotData(data){
     index = data;
     renderQuestion(index)
+    quiz.style.display = "block";
 }
 
 
@@ -280,21 +302,37 @@ function renderProgress(){
 
 function renderCounter(){
     if(count > 0){
-        counter.innerHTML = count + "sec.";
+        counter.innerHTML = count + " sec.";
         timeGauge.style.width = count * gaugeUnit + "px";
         count--
 
-    // if 10 seconds have passed (end question)
+    // if 20 seconds have passed (end question)
     }else{
+
+        quiz.style.display = "none";
         // Clear TIMER and set counter back to 0
-        nextindex = Math.floor(Math.random() * 3)
-        nextquestion(nextindex)
+        userscoreshow.innerHTML = "Jouw score: " + score;
         hide(1)
         wait.style.display = "block";
         clearInterval(TIMER)
-        count = 10;
-        startQuiz()
+        count = 20;
 
+        // If user didn't choose an option
+        if(filled == 0){
+            score = score - 70;
+            update_score("{{ user }}", score)
+            userscoreshow.innerHTML = "Jouw score: " + score;
+        }
+
+
+        // Set random next question if user forgets to choose category
+        nextindex = Math.floor(Math.random() * 3);
+        nextquestion(nextindex)
+        // Wait 10 seconds for next question
+        setTimeout(function wait(){
+            // remove category choice box and start new question
+            choosecat.style.display = "none";
+            startQuiz();}, 10000);
 
         if(numberQuestion < lastQuestion){
             numberQuestion++;
@@ -313,7 +351,6 @@ function renderCounter(){
 
 function checkAnswer(answer){
     filled = 1;
-
     if( answer == correctindex){
         // answer is correct
         score = score + (questions[runningQuestion]).pointscorrect;
