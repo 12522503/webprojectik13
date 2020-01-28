@@ -101,7 +101,6 @@ const questionTime = 20; // 20s
 const gaugeWidth = 550; // 150px
 const gaugeUnit = gaugeWidth / questionTime;
 let TIMER;
-let score = 0;
 let filled = 0;
 
 ////////////////////////
@@ -171,6 +170,7 @@ function startQuiz(){
     filled = 0;
     wait.style.display = "none";
     questionno.innerHTML = "vraag " + (numberQuestion + 1) + " van " + '{{ amount }}';
+    reset();
     checkquestion();
     renderProgress();
     renderCounter();
@@ -179,74 +179,14 @@ function startQuiz(){
     TIMER = setInterval(renderCounter,1000); // 1000ms = 1s
 }
 
-var userscore;
-// Get user score
-function user_score()
+function reset()
     {
-        url = "/getuserscore?user=" + '{{ user }}';
-        $.get(url, function(data){
-            userscore=data;
-            console.log(userscore)
-            userscoreshow.innerHTML = userscore
-        })
-    }
-
-var scores;
-
-// Get scores from JSON
-function get_scores()
-    {
-        url= "/getscores?room=" + '{{ room }}';
-        // If loaded, start gotData
-        $.getJSON(url, gotScores)
-    }
-
-// If loaded, scheck if current user has lowest points
-function gotScores(data){
-
-    scores = data;
-    console.log(scores)
-    var keys = Object.keys(scores);
-
-    // Select lowest score
-    var lowest = Math.min.apply(null, keys.map(function(x) {return scores[x]} ));
-
-    // Search for user with found lowest score
-    var match = keys.filter(function(y) {return scores[y] === lowest});
-
-    // Select user with lowest score
-    if (match > 1){
-        var nextuser = match[0]
-    }else{
-        var nextuser = match
-    }
-
-    // Let user with lowest score choose next category
-    if (nextuser == "{{ user }}"){
-        choosecat.style.display = "block";
-    }
-}
-
-
-    function update_score(user, update)
-    {
-        url = "/updatescore?user="+user+"&update="+update;
+        url = "/finalscores?arg=reset";
         $.get(url, function(data) {
             if (data == true)
             {}
         });
     }
-
-
-
-function nextquestion(option){
-    choosecat.style.display = "none"
-    url = "/question?cat=" + option;
-    $.getJSON(url, function(data){
-        if(data == true)
-        {}
-    })
-}
 
 var index;
 
@@ -265,6 +205,14 @@ function gotData(data){
     quiz.style.display = "block";
 }
 
+function nextquestion(option){
+    choosecat.style.display = "none"
+    url = "/question?cat=" + option;
+    $.getJSON(url, function(data){
+        if(data == true)
+        {}
+    })
+}
 
 
 // render a question
@@ -314,7 +262,7 @@ function renderCounter(){
 
         quiz.style.display = "none";
         // Clear TIMER and set counter back to 0
-        userscoreshow.innerHTML = "Jouw score: " + score;
+
         hide(1)
         wait.style.display = "block";
         clearInterval(TIMER)
@@ -322,9 +270,7 @@ function renderCounter(){
 
         // If user didn't choose an option
         if(filled == 0){
-            score = score - 70;
-            update_score("{{ user }}", score)
-            userscoreshow.innerHTML = "Jouw score: " + score;
+            score(incorrect)
         }
 
 
@@ -333,14 +279,12 @@ function renderCounter(){
         nextquestion(nextindex)
         // Wait 10 seconds for next question
         setTimeout(function wait(){
+
             // remove category choice box and start new question
-            choosecat.style.display = "none";
-            startQuiz();}, 10000);
+            check();}, 10000);
 
         if(numberQuestion < lastQuestion){
             numberQuestion++;
-            get_scores()
-
         }else{
             // end the quiz and show the score
             clearInterval(TIMER);
@@ -351,24 +295,48 @@ function renderCounter(){
 }
 
 // checkAnwer, triggered when clicked on answer
+function score(correct_incorrect)
+    {
+        url = "/finalscores?arg=" + correct_incorrect;
+        $.get(url, function(data) {
+            if (data == true)
+            {}
+        });
+    }
+
+function check()
+    {
+        url = "/finalscores?arg=check";
+        $.get(url, function(data) {
+            if (data == true)
+            {
+                window.location.href = "/winner"
+            }
+            else if (data == false)
+            {
+                window.location.href = "/lost"
+            }
+            else
+            {
+                startQuiz();
+            }
+        });
+    }
+
 
 function checkAnswer(answer){
     filled = 1;
     if( answer == correctindex){
         // answer is correct
-        score = score + (questions[runningQuestion]).pointscorrect;
+        score("correct")
         correct.style.display = "block";
-        // change progress color to green
-        // answerIsCorrect();
+
     }else{
         // answer is wrong
-        // change progress color to red
-        score = score + (questions[runningQuestion]).pointsincorrect
-        // answerIsWrong();
+        score("incorrect")
         incorrect.style.display = "block";
     }
     hide(1);
-    update_score("{{ user }}", score)
 }
 
 // answer is correct
