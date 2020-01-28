@@ -7,29 +7,7 @@
 {% block main %}
 
     <div class="first-column">
-        <div id="rcorners1">
-            <large><font align="left" color="blue">Jij: {{ user }}</font><br></large>
-            <h5>Kamer: {{ room }}</h5>
-            <hr>
-            <h6>Vraag</h6><div id="questionno">1</div>
-            <table class="table table-striped" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Speler</th>
-                        <th>Score</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for user, score in scores.items() %}
-                    <tr>
-                        <td>{{ user }}</td>
-                        <td>{{ score }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+
     <div class="second-column">
         <div id="rcorners2">
             <div id="quiz" style="display: none">
@@ -85,7 +63,7 @@ const wait = document.getElementById("wait");
 let questions = {{ questions | safe }}
 
 
-const lastQuestion = {{ amount }} - 1;
+const lastQuestion = 100s;
 let numberQuestion = 0;
 let runningQuestion;
 let count = 10;
