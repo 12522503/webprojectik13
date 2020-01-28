@@ -38,7 +38,6 @@ Session(app)
 db = SQL("sqlite:///webproject.db")
 
 
-
 @app.route("/", methods=["GET", "POST"])
 def index():
     """Show start screen for website"""
@@ -71,7 +70,6 @@ def index():
         if room == "standard":
             return apology("Kies een room", 400)
 
-
         # Check if username already exists
         usernames = db.execute("SELECT * FROM users WHERE username = :username", username=username)
         if usernames:
@@ -79,18 +77,17 @@ def index():
 
         # Save username to database
         db.execute("INSERT INTO users (username, room) VALUES (:username, :room)",
-                    username=username, room=room)
+                   username=username, room=room)
 
         # Update useramount in that room
         db.execute("UPDATE rooms SET useramount = useramount + 1 WHERE room= :roomname",
-                    roomname=room)
+                   roomname=room)
         return inroom()
-
 
 
 @app.route("/makeroom", methods=["GET", "POST"])
 def makeroom():
-    """Show start screen for website"""
+    """Let a host create a room"""
 
     if request.method == "GET":
         return render_template("makeroom.html")
@@ -102,14 +99,14 @@ def makeroom():
 
         # Choose random question within category
         if number == 0:
-            index = random.randint(0,4)
+            index = random.randint(0, 4)
         if number == 1:
             print("CORRECT")
-            index = random.randint(5,9)
+            index = random.randint(5, 9)
         if number == 2:
-            index = random.randint(10,14)
+            index = random.randint(10, 14)
         if number == 3:
-            index = random.randint(15,19)
+            index = random.randint(15, 19)
 
         # Get all variables
         roomname = request.form.get("room")
@@ -145,28 +142,32 @@ def makeroom():
 
         # Insert room with questionindex for first question
         db.execute("INSERT INTO rooms (room, useramount, dates, questions, nextindex) VALUES(:room, :useramount, :date, :q, :index)",
-                    room=roomname, useramount=1, date=date.today(), q=int(questions), index=index)
+                   room=roomname, useramount=1, date=date.today(), q=int(questions), index=index)
 
         # Insert user into users table
         db.execute("INSERT INTO users (username, room, fifty, double, joker, score, ready) VALUES(:name, :room, :f, :d, :j, :s, :r)",
-                    name=username, room=roomname, f=1, d=1, j=1, s=1, r=0)
+                   name=username, room=roomname, f=1, d=1, j=1, s=1, r=0)
         return inroom()
 
 
 @app.route("/room", methods=["GET", "POST"])
 def inroom():
+    """Show room screen"""
     # Return template with message
     return render_template("room.html", user=session["user"], room=session["room"])
 
+
 @app.route("/setready")
 def setready():
+    """Set game ready"""
     room = request.args.get("room")
     db.execute("UPDATE rooms SET ready=:status WHERE room=:room", status=1, room=room)
     return jsonify(True)
 
-# Check if game is ready to start (selected by host)
+
 @app.route("/check")
 def check():
+    """Check if game is ready to start"""
     info = db.execute("SELECT * FROM rooms WHERE room=:room", room=request.args.get("room"))
     ready = info[0]["ready"]
 
@@ -176,22 +177,21 @@ def check():
         return jsonify(True)
 
 
-
 @app.route("/game", methods=["GET", "POST"])
 def game():
+    """Game screen"""
     # Get information of room
-    room=session["room"]
+    room = session["room"]
     questionamount = (db.execute("SELECT questions FROM rooms WHERE room=:room", room=room))[0]["questions"]
 
     # User scores
-    room=session["room"]
+    room = session["room"]
     getinfo = db.execute("SELECT username, score FROM users WHERE room=:room", room=room)
     info = dict()
     for item in getinfo:
         user = item["username"]
         score = item["score"]
         info[user] = score
-
 
     # Get questions
     questiondata = db.execute("SELECT * FROM questions")
@@ -211,13 +211,14 @@ def game():
     return render_template("game.html", user=session["user"], room=session["room"], questions=questions, amount=questionamount, scores=info)
 
 
-
 @app.route("/thanks", methods=["GET"])
 def thanks():
+    """Thanks screen"""
     if request.method == "GET":
         return render_template("thanks.html")
     else:
         return index()
+
 
 def errorhandler(e):
     """Handle error"""
@@ -228,6 +229,7 @@ def errorhandler(e):
 
 @app.route("/getscores")
 def scores():
+    """Get scores of users from room"""
     getinfo = db.execute("SELECT username, score FROM users WHERE room=:room", room=request.args.get("room"))
     info = dict()
     for item in getinfo:
@@ -240,34 +242,37 @@ def scores():
 
 @app.route("/updatescore")
 def updatescore():
+    """Update userscore"""
     user = request.args.get("user")
     update = request.args.get("update")
     print(user, update)
     db.execute("UPDATE users SET score = :update WHERE username=:user", update=update, user=user)
     return update
 
+
 @app.route("/getuserscore")
 def userscore():
+    """Select personal score"""
     user = request.args.get("userscore")
     score = db.execute("SELECT score FROM users WHERE username=:user", user=user)
-    userscore=score["score"]
+    userscore = score["score"]
     return jsonify(userscore)
+
 
 @app.route("/question")
 def question():
-    # Choose questions with chosen category
+    """Choose random question from chosen category"""
     number = int(request.args.get("cat"))
-
 
     # Choose random question within category
     if number == 0:
-        index = random.randint(0,4)
+        index = random.randint(0, 4)
     if number == 1:
-        index = random.randint(5,9)
+        index = random.randint(5, 9)
     if number == 2:
-        index = random.randint(10,14)
+        index = random.randint(10, 14)
     if number == 3:
-        index = random.randint(15,19)
+        index = random.randint(15, 19)
 
     # Set question index in database
     db.execute("UPDATE rooms SET nextindex = :index", index=index)
@@ -275,25 +280,24 @@ def question():
     # Return question index
     return jsonify(index)
 
+
 @app.route("/checkquestion")
 def checkquestion():
+    """Check next question"""
     # Select room
     room = request.args.get("room")
     row = db.execute("SELECT * FROM rooms WHERE room = :room", room=room)
 
-
     # Select index of next question
     index = row[0]["nextindex"]
-    print("INDEX: ", index)
-
 
     # Return question index
-
     return jsonify(index)
 
 
 @app.route("/ranking", methods=["GET", "POST"])
 def ranking():
+    """Ranking for users in room"""
     if request.method == "GET":
 
         # get used room
@@ -304,47 +308,58 @@ def ranking():
 
         # sort dict using reverse
         sortedranking = sorted(ranking, key=lambda x: int(x['score']), reverse=True)
-        user=session["user"]
+        user = session["user"]
         print(user)
         # add ranking to dict
         j = 1
         for i in sortedranking:
-                i["rank"] = j
-                j += 1
+            i["rank"] = j
+            j += 1
 
         # give dict to html
         return render_template("ranking.html", ranking=sortedranking, user=session["user"])
 
 
-
-
 @app.route("/lost", methods=["GET", "POST"])
 def lost():
+    """Screen for people who didn't get to final"""
     if request.method == "GET":
         return render_template("lost.html")
     if request.method == "POST":
         reviews = request.form.get("review")
         db.execute("UPDATE users SET review = :review WHERE username = :user",
-        review = reviews, user=session["user"])
-        print(review)
+                   review=reviews, user=session["user"])
+
         return render_template("review.html")
+
+
+@app.route("/winner", methods=["GET", "POST"])
+def winner():
+    """Screen for winner"""
+    if request.method == "GET":
+        return render_template("winner.html")
 
 
 @app.route("/review", methods=["GET", "POST"])
 def review():
+    """Show screen with reviews"""
     if request.method == "GET":
         getinfo = db.execute("SELECT username, review FROM users")
-        print(getinfo)
+
         return render_template("review.html", reviews=getinfo)
 
 
-
+@app.route("/finalroom", methods=["GET", "POST"])
+def finalroom():
+    """Room before starting final"""
+    return render_template("finalroom.html")
 
 
 @app.route("/final", methods=["GET", "POST"])
 def final():
+    """Game screen for final"""
     # Get information of room
-    room=session["room"]
+    room = session["room"]
     getinfo = db.execute("SELECT username, score FROM users WHERE room=:room", room=room)
     info = dict()
     for item in getinfo:
@@ -369,22 +384,13 @@ def final():
 
     return render_template("final.html", user=session["user"], scores=info, room=session["room"], questions=questions, amount=questionamount)
 
-@app.route("/finalroom", methods=["GET", "POST"])
-def finalroom():
-    return render_template("finalroom.html")
-
-
-@app.route("/winner", methods=["GET", "POST"])
-def winner():
-     if request.method == "GET":
-         return render_template("winner.html")
 
 @app.route("/userready")
 def userready():
+    """Set user ready for game"""
     arg = request.args.get("arg")
     usr = session["user"]
     users_ready = db.execute("SELECT * FROM users WHERE ready=:ready AND room=:room", ready=1, room=session["room"])
-    print("USER: ", usr)
 
     # Set user ready for game
     if arg == "set":
@@ -397,47 +403,51 @@ def userready():
 
         # If all users are ready to play
         if len(users) == len(users_ready):
-            print("READY")
             return jsonify(True)
 
         # If not
         else:
-            print(users)
-            print("ready:", len(users_ready), "users:", len(users))
-            print("NOT READY")
             return jsonify(False)
 
+    # Reset ready statement
     if arg == "reset":
         db.execute("UPDATE users SET ready = :ready WHERE username =:user", ready=0, user=usr)
         return jsonify(True)
 
+    # Check if ready to play final
     if arg == "checkfinal":
         users_ready = db.execute("SELECT * FROM users WHERE ready=:ready AND room=:room", ready=1 or 100, room=session["room"])
 
         if len(users_ready) == 2:
             final_users = [item["username"] for item in users_ready]
-            # # Set ready = 100 for users who play final
-            # for user in final_users:
-            #     db.execute("UPDATE users SET ready = :finalready WHERE username =:user", finalready=100, user=user)
-            print("FINAL USERS:", final_users)
+            # Set ready = 100 for users who play final
+            for user in final_users:
+                db.execute("UPDATE users SET ready = :finalready WHERE username =:user", finalready=100, user=user)
             return jsonify(True)
         else:
             return jsonify(False)
 
+
 @app.route("/finalscores")
 def finalscores():
+    """Scores for final game"""
     arg = request.args.get("arg")
+
+    # Reset scores after each question
     if arg == "reset":
         db.execute("UPDATE users SET ready = :finalready WHERE username = :user", finalready=100, user=session["user"])
         return jsonify(False)
 
+    # Insert correct score
     if arg == "correct":
         db.execute("UPDATE users SET ready = :correct WHERE username = :user", correct=200, user=session["user"])
         return jsonify(False)
 
+    # Incorrect answer
     if arg == "incorrect":
-        return jsonify (False)
+        return jsonify(False)
 
+    # Check if both users answered correct/incorrect
     if arg == "check":
         userinfo = db.execute("SELECT * FROM users WHERE room=:room AND ready >= 100", room=session["room"])
         finaluser1 = userinfo[0]["username"]
@@ -445,17 +455,16 @@ def finalscores():
         finaluser2 = userinfo[1]["username"]
         score2 = userinfo[1]["ready"]
 
+        # If both users answered correct or incorrect
         if score1 == score2:
             return jsonify("same")
+
+        # If you answered correct and other user answered wrong
         elif score1 > score2 and finaluser1 == session["user"]:
             return jsonify(True)
+
+        # If you answered wrong and other user answered correct
         elif score2 > score1 and finaluser2 == session["user"]:
             return jsonify(True)
         else:
             return jsonify(False)
-
-
-
-
-
-
