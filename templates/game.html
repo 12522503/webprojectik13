@@ -105,6 +105,7 @@ const gaugeUnit = gaugeWidth / questionTime;
 let TIMER;
 let score = 0;
 let filled = 0;
+let jokerused = 0;
 
 ////////////////////////
 // HELPERS FUNCTIONS //
@@ -153,9 +154,7 @@ function shuffle(array) {
 
 
 
-//////////////////////
-// IN GAME FUNCIONS//
-////////////////////
+/*Ingame functions*/
 
 //  When page fully loaded
     jQuery(document).ready(function(){
@@ -170,6 +169,11 @@ function shuffle(array) {
 
 // start quiz, set timer for question
 function startQuiz(){
+
+    // Show joker if not used yet
+    if (jokerused == 0){
+        joker.style.display = "block";
+    }
     filled = 0;
     wait.style.display = "none";
     questionno.innerHTML = "vraag " + (numberQuestion + 1) + " van " + '{{ amount }}';
@@ -182,6 +186,8 @@ function startQuiz(){
 }
 
 var userscore;
+
+
 // Get user score
 function user_score()
     {
@@ -195,6 +201,7 @@ function user_score()
 
 var scores;
 
+
 // Get scores from JSON
 function get_scores()
     {
@@ -202,6 +209,7 @@ function get_scores()
         // If loaded, start gotData
         $.getJSON(url, gotScores)
     }
+
 
 // If loaded, scheck if current user has lowest points
 function gotScores(data){
@@ -313,7 +321,7 @@ function renderCounter(){
 
     // if 20 seconds have passed (end question)
     }else{
-
+        joker.style.display = "none";
         quiz.style.display = "none";
         // Clear TIMER and set counter back to 0
         userscoreshow.innerHTML = "Jouw score: " + score;
@@ -353,7 +361,6 @@ function renderCounter(){
 }
 
 // checkAnwer, triggered when clicked on answer
-
 function checkAnswer(answer){
     filled = 1;
     if( answer == correctindex){
@@ -383,7 +390,7 @@ function answerIsWrong(){
     document.getElementById(runningQuestion).style.backgroundColor = "#f00";
 }
 
-// Lets user make us of joker
+// Lets user make use of joker
 joker.onclick = function(){
     filled = 1;
     hide(1);
@@ -391,6 +398,7 @@ joker.onclick = function(){
     update_score("{{ user }}", score);
     userscoreshow.innerHTML = "Jouw score: " + score;
     joker.style.display = "none";
+    jokerused = 1;
 }
 
 
