@@ -330,7 +330,7 @@ def lost():
         db.execute("UPDATE users SET review = :review WHERE username = :user",
                    review=reviews, user=session["user"])
 
-        return render_template("review.html")
+        return review()
 
 
 @app.route("/winner", methods=["GET", "POST"])
@@ -421,8 +421,8 @@ def userready():
         if len(users_ready) == 2:
             final_users = [item["username"] for item in users_ready]
             # Set ready = 100 for users who play final
-            for user in final_users:
-                db.execute("UPDATE users SET ready = :finalready WHERE username =:user", finalready=100, user=user)
+            # for user in final_users:
+            #     db.execute("UPDATE users SET ready = :finalready WHERE username =:user", finalready=100, user=user)
             return jsonify(True)
         else:
             return jsonify(False)

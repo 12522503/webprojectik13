@@ -12,15 +12,28 @@
             <large><font align="left" color="blue">Gebruikersnaam: {{ user }}</font><br></large>
             <h5>Kamer: {{ room }}</h5>
             <hr>
+            <h6 id="questionno">vraag</h6>
+            <div id="userscore">Jouw score: 0 </div>
         </div>
     </div>
 
     <div class="second-column">
         <div id="rcorners2">
             <div id ="wait">
-                <h3>Aan het laden, even geduld aub...</h3>
+                <h3>Wachten op de volgende vraag...</h3>
                 <img src="static/30.gif">
                 <br><br><br>
+            </div>
+
+            <div id="choosecat" style="display:none">
+                <b><font>Kies een categorie voor de volgende vraag:</font></b>
+                <p>Jij hebt momenteel het minst aantal punten en kan dus de categorie van de volgende vraag bepalen. </p>
+                <font color="red"> Als je niet binnen 10 seconden een categorie kiest wordt de volgende vraag random gekozen!</font><br>
+                <div class="choice2" id="0" onclick="nextquestion(0)">Fractievoorzitters & Ministers</div><br>
+                <div class="choice2" id="1" onclick="nextquestion(1)">Politiek Spectrum</div><br>
+                <div class="choice2" id="2" onclick="nextquestion(2)">Geschiedenis</div><br>
+                <div class="choice2" id="3" onclick="nextquestion(3)">Uitspraken</div><br>
+            </div>
             <div id="quiz" style="display: none">
                 <h2 id="question"></h2>
 
@@ -75,6 +88,11 @@ const questionno = document.getElementById("questionno");
 const wait = document.getElementById("wait");
 const userscoreshow = document.getElementById("userscore");
 
+// get questions from database
+let questions = {{ questions | safe }}
+
+
+
 const lastQuestion = 100;
 let numberQuestion = 0;
 let runningQuestion;
@@ -85,12 +103,11 @@ const gaugeUnit = gaugeWidth / questionTime;
 let TIMER;
 let filled = 0;
 
-// get questions from database
-let questions = {{ questions | safe }}
+////////////////////////
+// HELPERS FUNCTIONS //
+//////////////////////
 
-
-
-// Hide options if option is clicked
+// HELPERS hide options if option is clicked
 function hide(hide){
     var a = document.getElementById("A");
     var b = document.getElementById("B");
@@ -111,7 +128,7 @@ function hide(hide){
 }
 
 
-// Shuffle indexes of questions
+// HELPERS shuffle indexes of questions
 function shuffle(array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -132,6 +149,11 @@ function shuffle(array) {
 }
 
 
+
+//////////////////////
+// IN GAME FUNCIONS//
+////////////////////
+
 //  When page fully loaded
     jQuery(document).ready(function(){
         hide(0);
@@ -142,22 +164,21 @@ function shuffle(array) {
     });
 
 
-// Start quiz, set timer for question
+
+// start quiz, set timer for question
 function startQuiz(){
     filled = 0;
     wait.style.display = "none";
-    // Reset userscores
+    questionno.innerHTML = "vraag " + (numberQuestion + 1) + " van " + '{{ amount }}';
     reset();
-    // Get information for next question
     checkquestion();
     renderProgress();
     renderCounter();
 
-    // Run every second
+    // run every second
     TIMER = setInterval(renderCounter,1000); // 1000ms = 1s
 }
 
-// Reset userscore for next question
 function reset()
     {
         url = "/finalscores?arg=reset";
@@ -196,16 +217,14 @@ function nextquestion(option){
 
 // render a question
 function renderQuestion(index){
-    // Get index of next question
+
     runningQuestion = index;
 
-    // Unhide questionblock
+    // unhide questionblock
     hide(0);
-    // Hide feedback (correct/incorrect)
+    // hide feedback (correct/incorrect)
     correct.style.display = "none";
     incorrect.style.display = "none";
-
-    // Get questionoptions and shuffle them randomly
     let q = questions[runningQuestion];
     answers = [q.correct, q.answer2, q.answer3, q.answer4]
     let index_array = shuffle([0, 1, 2, 3])
@@ -225,7 +244,7 @@ function renderQuestion(index){
 
 
 
-// Render progress
+// render progress
 function renderProgress(){
     for(let qIndex = 0; qIndex <= lastQuestion; qIndex++){
         progress.innerHTML += "<div class='prog' id="+ qIndex +"></div>";
@@ -238,11 +257,12 @@ function renderCounter(){
         timeGauge.style.width = count * gaugeUnit + "px";
         count--
 
-    // If 20 seconds have passed (end question)
+    // if 20 seconds have passed (end question)
     }else{
-        // Hide quiz (questions)
+
         quiz.style.display = "none";
         // Clear TIMER and set counter back to 0
+
         hide(1)
         wait.style.display = "block";
         clearInterval(TIMER)
@@ -250,11 +270,11 @@ function renderCounter(){
 
         // If user didn't choose an option
         if(filled == 0){
-            // Incorrect answer
             score(incorrect)
         }
 
-        // Set random next question
+
+        // Set random next question if user forgets to choose category
         nextindex = Math.floor(Math.random() * 3);
         nextquestion(nextindex)
         // Wait 10 seconds for next question
@@ -262,9 +282,19 @@ function renderCounter(){
 
             // remove category choice box and start new question
             check();}, 10000);
+
+        if(numberQuestion < lastQuestion){
+            numberQuestion++;
+        }else{
+            // end the quiz and show the score
+            clearInterval(TIMER);
+            url =  "/ranking?room=" + '{{ room }}'
+            window.location.href = url;
+        }
+    }
 }
 
-// Update userscore to database
+// checkAnwer, triggered when clicked on answer
 function score(correct_incorrect)
     {
         url = "/finalscores?arg=" + correct_incorrect;
@@ -274,22 +304,18 @@ function score(correct_incorrect)
         });
     }
 
-// Check if all users have correct answer
 function check()
     {
         url = "/finalscores?arg=check";
         $.get(url, function(data) {
-            // If your answer was correct and the other user answered wrong
             if (data == true)
             {
                 window.location.href = "/winner"
             }
-            // If your answer is wrong and the other user answered correct
             else if (data == false)
             {
                 window.location.href = "/lost"
             }
-            // Go to next question if both have answer correct/wrong
             else
             {
                 startQuiz();
@@ -297,7 +323,7 @@ function check()
         });
     }
 
-// Check if answer was correct
+
 function checkAnswer(answer){
     filled = 1;
     if( answer == correctindex){
@@ -313,6 +339,19 @@ function checkAnswer(answer){
     hide(1);
 }
 
+// answer is correct
+function answerIsCorrect(){
+    document.getElementById(runningQuestion).style.backgroundColor = "#0f0";
+}
 
-</script>
+// answer is Wrong
+function answerIsWrong(){
+    document.getElementById(runningQuestion).style.backgroundColor = "#f00";
+}
+
+
+
+
+
+    </script>
 {% endblock %}
