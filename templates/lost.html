@@ -5,19 +5,26 @@
 {% endblock %}
 
 {% block main %}
+ <!--create text field with gif-->
     <div class="first-column">
         <div id="rcorners1">
             <img id="lekker" src="/static/byethierry.gif"></img>
         </div>
     </div>
+
+    <!--create text field-->
     <div class="second-column">
         <div id="rcorners2">
             <div class="blocktext">
                 <h2> <b>  Verloren </b></h2>
                 <b><h3 stylse="black">Bedankt voor het spelen van ons trivia spel! </h3> </b></i><br>
                 <p>Verbeter je kennis door een nieuw spel te starten.<br> Ook kan je een review achterlaten, tips zijn altijd welkom!</p>
+
+            <!--button with redirect to index-->
             <a class="btn btn-primary" type="onclick" href="/">Spel starten! </a> <br>
         <br>
+
+     <!--text field with input and button to post    -->
      <form action="/lost" method="POST">
         <textarea rows="6" cols="70" placeholder="Schrijf je review hier!" name="review" rows="4" cols="50"></textarea>
         <br>

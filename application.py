@@ -337,7 +337,11 @@ def winner():
     """Screen for winner"""
     if request.method == "GET":
         return render_template("winner.html")
-
+    if request.method == "POST":
+        reviews = request.form.get("review")
+        db.execute("UPDATE users SET review = :review WHERE username = :user",
+                   review=reviews, user=session["user"])
+        return review()
 
 @app.route("/review", methods=["GET", "POST"])
 def review():
