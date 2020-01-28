@@ -329,7 +329,6 @@ def lost():
         reviews = request.form.get("review")
         db.execute("UPDATE users SET review = :review WHERE username = :user",
                    review=reviews, user=session["user"])
-
         return review()
 
 
@@ -347,6 +346,12 @@ def review():
         getinfo = db.execute("SELECT username, review FROM users")
 
         return render_template("review.html", reviews=getinfo)
+
+    else:
+        getinfo = db.execute("SELECT username, review FROM users")
+
+        return render_template("review.html", reviews=getinfo)
+
 
 
 @app.route("/finalroom", methods=["GET", "POST"])
