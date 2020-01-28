@@ -16,12 +16,34 @@
 
     <img src="/static/champion.gif">
          </img>
+         <br>
+
+         <form action="/winner" method="POST">
+        <textarea rows="6" cols="70" placeholder="Schrijf je review hier!" name="review" rows="4" cols="50">
 
 
-    <br>
+        </textarea>
 
 
+       <button class="btn btn-primary" Onclick="hideandshow()" type="submit">Submit review</button>
+     </form>
+    <div style="display:none" id="show">
+      <font color="green"> <b>  Bedankt voor de Review! Check de reviews <a href="/review"> hier </a> </b> </font>
+    </div>
+
+<script>
+function hideandshow() {
+  var i = document.getElementById("show");
+  if (i.style.display === "none") {
+    i.style.display = "block";
+  } else {
+    i.style.display = "none";
+  }
+}
+  jQuery(document).ready(function(){
+        hideandshow()
+    });
+</script>
 
 
-</div>
 {% endblock %}
