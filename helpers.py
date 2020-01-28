@@ -10,24 +10,6 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
-
-def apology (message, code=400):
+# Render apology
+def apology(message, code=400):
     return render_template("apology.html", top=code, bottom=message)
-
-
-
-# def get_random_question ():
-#     return ??
-
-
-# #
-# def joker ():
-#     return ??
-
-# def fifty ():
-#     return ??
-
-# def double ():
-#     return??
-
-

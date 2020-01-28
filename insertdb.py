@@ -34,7 +34,7 @@ q = [["Welke fractievoorzitter is het jongste?", "Fractievoorzitters & Ministers
 ["Van wie is de uitspraak ,Willen we meer of minder Marokkanen?’?", "Uitspraken", "Geert Wilders (PVV)", "Thierry Baudet (FvD)", "Sylvana Simons (BIJ1)", "Emile Roemer (SP)", 30, -60]]
 
 
-
+# Insert questions into database
 for question in q:
     db.execute("INSERT INTO questions (question, category, correctanswer, answer2, answer3, answer4, pointscorrect, pointsincorrect) VALUES(:q, :c, :correct, :a2, :a3, :a4, :yes, :no)",
                 q=question[0], c=question[1], correct=question[2], a2=question[3], a3=question[4], a4=question[5], yes=question[6], no=question[7])
