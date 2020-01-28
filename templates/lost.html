@@ -5,21 +5,19 @@
 {% endblock %}
 
 {% block main %}
-<div class="first-column">
+    <div class="first-column">
         <div id="rcorners1">
-
-        <img id="lekker" src="/static/byethierry.gif">
-         </img>
-
+            <img id="lekker" src="/static/byethierry.gif"></img>
         </div>
     </div>
- <div class="second-column">
+    <div class="second-column">
         <div id="rcorners2">
             <div class="blocktext">
-                <b><h3 stylse="black">Bedankt voor het spelen van ons trivia spel! </h3> </b></i><br> <p>
-                Verbeter je kennis door een nieuw spel te starten.<br> Ook kan je een review achterlaten, tips zijn altijd welkom!</p>
-        <a class="btn btn-primary" type="onclick" href="/">Spel starten! </a> <br>
+                <b><h3 stylse="black">Bedankt voor het spelen van ons trivia spel! </h3> </b></i><br>
+                <p>Verbeter je kennis door een nieuw spel te starten.<br> Ook kan je een review achterlaten, tips zijn altijd welkom!</p>
+            <a class="btn btn-primary" type="onclick" href="/">Spel starten! </a> <br>
         <br>
+<<<<<<< HEAD
  <form action="/lost" method="POST">
         <textarea rows="6" cols="70" placeholder="Schrijf je review hier!" name="review" rows="4" cols="50">
 
@@ -31,6 +29,13 @@
 
        <button id="show" class="btn btn-primary" type="submit">Submit review</button>
      </form>
+=======
+    <form class="form-inline" action="/lost" method="POST">
+    <textarea rows="6" cols="70" placeholder="Schrijf je review hier!" name="review" rows="4" cols="50">
+        </textarea>
+        <button class="btn btn-primary" type="submit">Submit review</button>
+    </form>
+>>>>>>> 52f4bb469bb53fbb9fe150f457efbcf77a6defc9
 
 
 {% endblock %}

@@ -10,17 +10,16 @@
     <br>
     <h1>Spel starten</h1>
     <a>Je speelt onder de naam </a>
-    <b><font color="blue">{{ user }}</font></b>
-    <a> in de kamer</a>
+    <b><font color="blue">{{ user }}</font></b><a> in de kamer</a>
     <b><font color="blue">{{ room }}</font><br><br><br>
-
 
     <form id="readybutton" name="startgame"></form>
         <button id="button" class="btn btn-primary" onclick="userready()";>Spel starten</button>
     </form>
-    <b><font id="ready" style="display:none" color="green">Wachten tot alle gebruikers klaar zijn om te spelen...</font></b><br><br>
 
+    <b><font id="ready" style="display:none" color="green">Wachten tot alle gebruikers klaar zijn om te spelen...</font></b><br><br>
     <hr>
+
     <h3>Spelopbouw</h3>
         <div id="text1" style="display:none">Voor elke vraag krijg je 20 seconden de tijd om te antwoorden. </div>
         <div id="text2" style="display:none">Bij een goed antwoord krijg je extra punten, maar bij een onjuist antwoord gaan er punten van jouw score af.</div>
@@ -29,14 +28,15 @@
 
     <div id="loading" >even geduld s.v.p. Spelopbouw aan het laden...</div><br><br>
 
-
-
-
 </div>
+
+
 <script>
 
 const button = document.getElementById("button");
 const ready = document.getElementById("ready");
+
+
 // Register user as "ready for game" in database
 function userready(){
     url = "/userready?arg=set";
@@ -50,9 +50,10 @@ function userready(){
     })
 }
 
+
 // Check if all users are ready to play
 function gameready(){
-       readytimer=setInterval(function()
+    readytimer=setInterval(function()
     {
         url = "/userready?arg=check";
         $.get(url, function(data) {
@@ -65,22 +66,22 @@ function gameready(){
             }
         });
     }, 50);
-    }
-    //When page fully loaded
-    jQuery(document).ready(function(){
-            text();
-    });
+}
+
+//When page fully loaded
+jQuery(document).ready(function(){
+    text();
+});
+
+let count = -1;
+const text1 = document.getElementById("text1");
+const text2 = document.getElementById("text2");
+const text3 = document.getElementById("text3");
+const text4 = document.getElementById("text4");
+const loading = document.getElementById("loading");
 
 
-
-    let count = -1;
-    const text1 = document.getElementById("text1");
-    const text2 = document.getElementById("text2");
-    const text3 = document.getElementById("text3");
-    const text4 = document.getElementById("text4");
-    const loading = document.getElementById("loading");
-
-
+// Inserts instructions into loadscreen
 function text(){
     setInterval(function(){
         count ++;
@@ -108,6 +109,8 @@ function text(){
         }
     }, 4000);
 }
-</script>
-{% endblock %}
 
+</script>
+
+
+{% endblock %}

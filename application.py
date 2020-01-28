@@ -383,6 +383,7 @@ def winner():
 def userready():
     arg = request.args.get("arg")
     usr = session["user"]
+    users_ready = db.execute("SELECT * FROM users WHERE ready=:ready AND room=:room", ready=1, room=session["room"])
     print("USER: ", usr)
 
     # Set user ready for game
@@ -393,7 +394,6 @@ def userready():
     # Check if all users are ready for game
     if arg == "check":
         users = db.execute("SELECT * FROM users WHERE room=:room", room=session["room"])
-        users_ready = db.execute("SELECT * FROM users WHERE ready=:ready AND room=:room", ready=1, room=session["room"])
 
         # If all users are ready to play
         if len(users) == len(users_ready):
@@ -412,12 +412,48 @@ def userready():
         return jsonify(True)
 
     if arg == "checkfinal":
-        users_ready = db.execute("SELECT * FROM users WHERE ready=:ready AND room=:room", ready=1, room=session["room"])
+        users_ready = db.execute("SELECT * FROM users WHERE ready=:ready AND room=:room", ready=1 or 100, room=session["room"])
 
         if len(users_ready) == 2:
+            final_users = [item["username"] for item in users_ready]
+            # # Set ready = 100 for users who play final
+            # for user in final_users:
+            #     db.execute("UPDATE users SET ready = :finalready WHERE username =:user", finalready=100, user=user)
+            print("FINAL USERS:", final_users)
             return jsonify(True)
         else:
             return jsonify(False)
+
+@app.route("/finalscores")
+def finalscores():
+    arg = request.args.get("arg")
+    if arg == "reset":
+        db.execute("UPDATE users SET ready = :finalready WHERE username = :user", finalready=100, user=session["user"])
+        return jsonify(False)
+
+    if arg == "correct":
+        db.execute("UPDATE users SET ready = :correct WHERE username = :user", correct=200, user=session["user"])
+        return jsonify(False)
+
+    if arg == "incorrect":
+        return jsonify (False)
+
+    if arg == "check":
+        userinfo = db.execute("SELECT * FROM users WHERE room=:room AND ready >= 100", room=session["room"])
+        finaluser1 = userinfo[0]["username"]
+        score1 = userinfo[0]["ready"]
+        finaluser2 = userinfo[1]["username"]
+        score2 = userinfo[1]["ready"]
+
+        if score1 == score2:
+            return jsonify("same")
+        elif score1 > score2 and finaluser1 == session["user"]:
+            return jsonify(True)
+        elif score2 > score1 and finaluser2 == session["user"]:
+            return jsonify(True)
+        else:
+            return jsonify(False)
+
 
 
 

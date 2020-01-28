@@ -60,13 +60,11 @@
             </div>
         </div>
     </div>
-    <script>
 
 
+<script>
 
-
-
-// select all elements
+// Select all elements
 const joker = document.getElementById("joker");
 const choosecat = document.getElementById("choosecat");
 const fractie = document.getElementById("0");
@@ -90,28 +88,26 @@ const incorrect = document.getElementById("incorrect");
 const questionno = document.getElementById("questionno");
 const wait = document.getElementById("wait");
 const userscoreshow = document.getElementById("userscore");
-
-// get questions from database
-let questions = {{ questions | safe }}
-
-
 const lastQuestion = {{ amount }} - 1;
-let numberQuestion = 0;
-let runningQuestion;
-let count = 20;
 const questionTime = 20; // 20s
 const gaugeWidth = 550; // 150px
 const gaugeUnit = gaugeWidth / questionTime;
+
+// Get questions from database
+let questions = {{ questions | safe }}
+
+let numberQuestion = 0;
+let runningQuestion;
+let count = 20;
 let TIMER;
 let score = 0;
 let filled = 0;
 let jokerused = 0;
 
-////////////////////////
-// HELPERS FUNCTIONS //
-//////////////////////
+/*Helper functions*/
 
-// HELPERS hide options if option is clicked
+
+// Hide options if option is clicked
 function hide(hide){
     var a = document.getElementById("A");
     var b = document.getElementById("B");
@@ -132,7 +128,7 @@ function hide(hide){
 }
 
 
-// HELPERS shuffle indexes of questions
+// Shuffle indexes of questions
 function shuffle(array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -156,7 +152,8 @@ function shuffle(array) {
 
 /*Ingame functions*/
 
-//  When page fully loaded
+
+// When page fully loaded
     jQuery(document).ready(function(){
         hide(0);
         correct.style.display = "none";
@@ -166,8 +163,7 @@ function shuffle(array) {
     });
 
 
-
-// start quiz, set timer for question
+// Start quiz, set timer for question
 function startQuiz(){
 
     // Show joker if not used yet
@@ -181,7 +177,7 @@ function startQuiz(){
     renderProgress();
     renderCounter();
 
-    // run every second
+    // Run every second
     TIMER = setInterval(renderCounter,1000); // 1000ms = 1s
 }
 
@@ -238,17 +234,18 @@ function gotScores(data){
 }
 
 
-    function update_score(user, update)
-    {
-        url = "/updatescore?user="+user+"&update="+update;
-        $.get(url, function(data) {
-            if (data == true)
-            {}
-        });
-    }
+// Updates user score
+function update_score(user, update)
+{
+    url = "/updatescore?user="+user+"&update="+update;
+    $.get(url, function(data) {
+        if (data == true)
+        {}
+    });
+}
 
 
-
+// Generate next question from database
 function nextquestion(option){
     choosecat.style.display = "none"
     url = "/question?cat=" + option;
@@ -260,10 +257,12 @@ function nextquestion(option){
 
 var index;
 
+
 // Checks index of current question
 function checkquestion()
     {
         url= "/checkquestion?room=" + '{{ room }}';
+
         // If loaded, start gotData
         $.getJSON(url, gotData)
     }
@@ -276,24 +275,24 @@ function gotData(data){
 }
 
 
-
-// render a question
+// Render a question
 function renderQuestion(index){
 
     runningQuestion = index;
 
-    // unhide questionblock
+    // Unhide questionblock
     hide(0);
-    // hide feedback (correct/incorrect)
+    // Hide feedback (correct/incorrect)
     correct.style.display = "none";
     incorrect.style.display = "none";
     let q = questions[runningQuestion];
     answers = [q.correct, q.answer2, q.answer3, q.answer4]
     let index_array = shuffle([0, 1, 2, 3])
 
-    // to check later if answer is correct
+    // To check later if answer is correct
     correctindex = index_array.indexOf(0)
 
+    // Inserts question and answers into page
     question.innerHTML = "<p>"+ q.question +"</p>";
     category.innerHTML = q.category
     choiceA.innerHTML = answers[(index_array[0])];
@@ -303,16 +302,14 @@ function renderQuestion(index){
 }
 
 
-
-
-
-// render progress
+// Render progress
 function renderProgress(){
     for(let qIndex = 0; qIndex <= lastQuestion; qIndex++){
         progress.innerHTML += "<div class='prog' id="+ qIndex +"></div>";
     }
 }
 
+// Render counter
 function renderCounter(){
     if(count > 0){
         counter.innerHTML = count + " sec.";
@@ -337,7 +334,6 @@ function renderCounter(){
             userscoreshow.innerHTML = "Jouw score: " + score;
         }
 
-
         // Set random next question if user forgets to choose category
         nextindex = Math.floor(Math.random() * 3);
         nextquestion(nextindex)
@@ -346,11 +342,9 @@ function renderCounter(){
             // remove category choice box and start new question
             choosecat.style.display = "none";
             startQuiz();}, 10000);
-
         if(numberQuestion < lastQuestion){
             numberQuestion++;
             get_scores()
-
         }else{
             // end the quiz and show the score
             clearInterval(TIMER);
@@ -359,6 +353,7 @@ function renderCounter(){
         }
     }
 }
+
 
 // checkAnwer, triggered when clicked on answer
 function checkAnswer(answer){
@@ -380,15 +375,18 @@ function checkAnswer(answer){
     update_score("{{ user }}", score)
 }
 
+
 // answer is correct
 function answerIsCorrect(){
     document.getElementById(runningQuestion).style.backgroundColor = "#0f0";
 }
 
+
 // answer is Wrong
 function answerIsWrong(){
     document.getElementById(runningQuestion).style.backgroundColor = "#f00";
 }
+
 
 // Lets user make use of joker
 joker.onclick = function(){
@@ -401,7 +399,7 @@ joker.onclick = function(){
     jokerused = 1;
 }
 
+</script>
 
 
-    </script>
 {% endblock %}
