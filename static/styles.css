@@ -345,3 +345,23 @@ body{
 /*    font-weight: bold;*/
 /*    text-align: center;*/
 /*}*/
+
+/*Joker pulses when user hovers over it*/
+.joker:hover {
+	transform: scale(1);
+	animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+	0% {
+		transform: scale(0.95);
+	}
+
+	70% {
+		transform: scale(1);
+	}
+
+	100% {
+		transform: scale(0.95);
+	}
+}
