@@ -7,6 +7,7 @@
 {% block main %}
 
     <div class="first-column">
+
         <div id="rcorners1">
             <large><font align="left" color="blue">Gebruikersnaam: {{ user }}</font><br></large>
             <h5>Kamer: {{ room }}</h5>
@@ -15,6 +16,7 @@
             <div id="userscore">Jouw score: 0 </div>
         </div>
     </div>
+
     <div class="second-column">
         <div id="rcorners2">
             <div id ="wait">
@@ -88,6 +90,7 @@ const userscoreshow = document.getElementById("userscore");
 
 // get questions from database
 let questions = {{ questions | safe }}
+
 
 
 const lastQuestion = 100;

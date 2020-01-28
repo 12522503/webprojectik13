@@ -384,6 +384,7 @@ def winner():
 def userready():
     arg = request.args.get("arg")
     usr = session["user"]
+    users_ready = db.execute("SELECT * FROM users WHERE ready=:ready AND room=:room", ready=1, room=session["room"])
     print("USER: ", usr)
 
     # Set user ready for game
@@ -394,7 +395,6 @@ def userready():
     # Check if all users are ready for game
     if arg == "check":
         users = db.execute("SELECT * FROM users WHERE room=:room", room=session["room"])
-        users_ready = db.execute("SELECT * FROM users WHERE ready=:ready AND room=:room", ready=1, room=session["room"])
 
         # If all users are ready to play
         if len(users) == len(users_ready):
@@ -413,7 +413,7 @@ def userready():
         return jsonify(True)
 
     if arg == "checkfinal":
-        users_ready = db.execute("SELECT * FROM users WHERE ready=:ready AND room=:room", ready=1, room=session["room"])
+
 
         if len(users_ready) == 2:
             return jsonify(True)
