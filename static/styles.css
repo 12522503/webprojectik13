@@ -209,7 +209,7 @@ body{
 
 .choice{
     display: inline-block;
-    width : 135px;
+    width : 100%;
     text-align: center;
     border : 1px solid grey;
     border-radius: 5px;
