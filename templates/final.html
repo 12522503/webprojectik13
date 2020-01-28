@@ -12,28 +12,17 @@
             <large><font align="left" color="blue">Gebruikersnaam: {{ user }}</font><br></large>
             <h5>Kamer: {{ room }}</h5>
             <hr>
-            <h6 id="questionno">vraag</h6>
-            <div id="userscore">Jouw score: 0 </div>
         </div>
     </div>
 
     <div class="second-column">
         <div id="rcorners2">
             <div id ="wait">
-                <h3>Wachten op de volgende vraag...</h3>
+                <h3>Aan het laden...</h3>
                 <img src="static/30.gif">
                 <br><br><br>
             </div>
 
-            <div id="choosecat" style="display:none">
-                <b><font>Kies een categorie voor de volgende vraag:</font></b>
-                <p>Jij hebt momenteel het minst aantal punten en kan dus de categorie van de volgende vraag bepalen. </p>
-                <font color="red"> Als je niet binnen 10 seconden een categorie kiest wordt de volgende vraag random gekozen!</font><br>
-                <div class="choice2" id="0" onclick="nextquestion(0)">Fractievoorzitters & Ministers</div><br>
-                <div class="choice2" id="1" onclick="nextquestion(1)">Politiek Spectrum</div><br>
-                <div class="choice2" id="2" onclick="nextquestion(2)">Geschiedenis</div><br>
-                <div class="choice2" id="3" onclick="nextquestion(3)">Uitspraken</div><br>
-            </div>
             <div id="quiz" style="display: none">
                 <h2 id="question"></h2>
 
@@ -65,11 +54,6 @@
 
 
 // select all elements
-const choosecat = document.getElementById("choosecat");
-const fractie = document.getElementById("0");
-const spectrum = document.getElementById("1");
-const geschiedenis = document.getElementById("2");
-const uitspraken = document.getElementById("3");
 const quiz = document.getElementById("quiz");
 const question = document.getElementById("question");
 const category = document.getElementById("category")
@@ -84,9 +68,7 @@ const progress = document.getElementById("progress");
 const scoreDiv = document.getElementById("scoreContainer");
 const correct = document.getElementById("correct");
 const incorrect = document.getElementById("incorrect");
-const questionno = document.getElementById("questionno");
 const wait = document.getElementById("wait");
-const userscoreshow = document.getElementById("userscore");
 
 // get questions from database
 let questions = {{ questions | safe }}
@@ -169,7 +151,6 @@ function shuffle(array) {
 function startQuiz(){
     filled = 0;
     wait.style.display = "none";
-    questionno.innerHTML = "vraag " + (numberQuestion + 1) + " van " + '{{ amount }}';
     reset();
     checkquestion();
     renderProgress();
@@ -206,7 +187,6 @@ function gotData(data){
 }
 
 function nextquestion(option){
-    choosecat.style.display = "none"
     url = "/question?cat=" + option;
     $.getJSON(url, function(data){
         if(data == true)
@@ -349,9 +329,7 @@ function answerIsWrong(){
     document.getElementById(runningQuestion).style.backgroundColor = "#f00";
 }
 
-
-
-
-
     </script>
+
+
 {% endblock %}
