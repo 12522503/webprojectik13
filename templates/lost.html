@@ -16,9 +16,21 @@
  <div class="second-column">
         <div id="rcorners2">
             <div class="blocktext">
-                <i><b><h1 stylse="black">Bedankt voor het spelen van ons trivia spel! </h1></b></i><br> <h2 style="black"> Jammer dat je niet hebt gewonnen,
-                verbeter je kennis door een nieuw spel te starten.</h2> <br>
-        <a class="btn btn-primary" type="onclick" href="/">Spel starten! </a>
+                <b><h3 stylse="black">Bedankt voor het spelen van ons trivia spel! </h3> </b></i><br> <p>
+                Verbeter je kennis door een nieuw spel te starten.<br> Ook kan je een review achterlaten, tips zijn altijd welkom!</p>
+        <a class="btn btn-primary" type="onclick" href="/">Spel starten! </a> <br>
+        <br>
+ <form class="form-inline" action="/lost" method="POST">
+        <textarea rows="6" cols="70" placeholder="Schrijf je review hier!" name="review" rows="4" cols="50">
+
+
+        </textarea>
+
+
+       <button class="btn btn-primary" type="submit">Submit review</button>
+     </form>
+
+
 
 
 {% endblock %}
