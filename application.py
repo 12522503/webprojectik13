@@ -101,7 +101,6 @@ def makeroom():
         if number == 0:
             index = random.randint(0, 4)
         if number == 1:
-            print("CORRECT")
             index = random.randint(5, 9)
         if number == 2:
             index = random.randint(10, 14)
@@ -245,7 +244,6 @@ def updatescore():
     """Update userscore"""
     user = request.args.get("user")
     update = request.args.get("update")
-    print(user, update)
     db.execute("UPDATE users SET score = :update WHERE username=:user", update=update, user=user)
     return update
 
@@ -309,7 +307,6 @@ def ranking():
         # sort dict using reverse
         sortedranking = sorted(ranking, key=lambda x: int(x['score']), reverse=True)
         user = session["user"]
-        print(user)
         # add ranking to dict
         j = 1
         for i in sortedranking:
