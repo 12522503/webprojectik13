@@ -340,6 +340,7 @@ def winner():
                    review=reviews, user=session["user"])
         return review()
 
+
 @app.route("/review", methods=["GET", "POST"])
 def review():
     """Show screen with reviews"""
@@ -352,7 +353,6 @@ def review():
         getinfo = db.execute("SELECT username, review FROM users")
 
         return render_template("review.html", reviews=getinfo)
-
 
 
 @app.route("/finalroom", methods=["GET", "POST"])
