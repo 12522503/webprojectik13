@@ -1,4 +1,9 @@
-# Technisch Ontwerp IK13
+# Beter dan Baudet
+##### Groep IK.13
+- Maxime van Munster
+- Jesse van der Sluis
+- Rowan Duits
+
 ## Controllers
 - /index: POST en GET. Hier kun je zien welke rooms al bestaan en een kiezen om in mee te doen. Vanuit hier kun je ook verder naar zelf een room aanmaken.
 - Hier hoort een scherm bij (een hmtl) met een link naar de route voor het aanmaken van een room.
