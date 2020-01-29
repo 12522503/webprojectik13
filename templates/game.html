@@ -149,10 +149,6 @@ function shuffle(array) {
 }
 
 
-
-/*Ingame functions*/
-
-
 // When page fully loaded
     jQuery(document).ready(function(){
         hide(0);
@@ -316,7 +312,7 @@ function renderCounter(){
         timeGauge.style.width = count * gaugeUnit + "px";
         count--
 
-    // if 20 seconds have passed (end question)
+    // If 20 seconds have passed (end question)
     }else{
         joker.style.display = "none";
         quiz.style.display = "none";
@@ -362,11 +358,8 @@ function checkAnswer(answer){
         // answer is correct
         score = score + (questions[runningQuestion]).pointscorrect;
         correct.style.display = "block";
-        // change progress color to green
-        // answerIsCorrect();
+
     }else{
-        // answer is wrong
-        // change progress color to red
         score = score + (questions[runningQuestion]).pointsincorrect
         // answerIsWrong();
         incorrect.style.display = "block";
@@ -375,17 +368,6 @@ function checkAnswer(answer){
     update_score("{{ user }}", score)
 }
 
-
-// answer is correct
-function answerIsCorrect(){
-    document.getElementById(runningQuestion).style.backgroundColor = "#0f0";
-}
-
-
-// answer is Wrong
-function answerIsWrong(){
-    document.getElementById(runningQuestion).style.backgroundColor = "#f00";
-}
 
 
 // Lets user make use of joker

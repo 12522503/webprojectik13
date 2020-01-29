@@ -85,9 +85,6 @@ const gaugeUnit = gaugeWidth / questionTime;
 let TIMER;
 let filled = 0;
 
-////////////////////////
-// HELPERS FUNCTIONS //
-//////////////////////
 
 // HELPERS hide options if option is clicked
 function hide(hide){
@@ -110,7 +107,7 @@ function hide(hide){
 }
 
 
-// HELPERS shuffle indexes of questions
+// Shuffle indexes of questions
 function shuffle(array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -131,11 +128,6 @@ function shuffle(array) {
 }
 
 
-
-//////////////////////
-// IN GAME FUNCIONS//
-////////////////////
-
 //  When page fully loaded
     jQuery(document).ready(function(){
         hide(0);
@@ -147,9 +139,10 @@ function shuffle(array) {
 
 
 
-// start quiz, set timer for question
+// Start quiz, set timer for question
 function startQuiz(){
     filled = 0;
+    // Hide "waiting" and get questions + start counter
     wait.style.display = "none";
     reset();
     checkquestion();
@@ -160,6 +153,7 @@ function startQuiz(){
     TIMER = setInterval(renderCounter,1000); // 1000ms = 1s
 }
 
+//
 function reset()
     {
         url = "/finalscores?arg=reset";
@@ -195,21 +189,21 @@ function nextquestion(option){
 }
 
 
-// render a question
+// Render a question
 function renderQuestion(index){
 
     runningQuestion = index;
 
-    // unhide questionblock
+    // Unhide questionblock
     hide(0);
-    // hide feedback (correct/incorrect)
+    // Hide feedback (correct/incorrect)
     correct.style.display = "none";
     incorrect.style.display = "none";
     let q = questions[runningQuestion];
     answers = [q.correct, q.answer2, q.answer3, q.answer4]
     let index_array = shuffle([0, 1, 2, 3])
 
-    // to check later if answer is correct
+    // To check later if answer is correct
     correctindex = index_array.indexOf(0)
 
     question.innerHTML = "<p>"+ q.question +"</p>";
@@ -224,7 +218,7 @@ function renderQuestion(index){
 
 
 
-// render progress
+// Render progress
 function renderProgress(){
     for(let qIndex = 0; qIndex <= lastQuestion; qIndex++){
         progress.innerHTML += "<div class='prog' id="+ qIndex +"></div>";
@@ -237,7 +231,7 @@ function renderCounter(){
         timeGauge.style.width = count * gaugeUnit + "px";
         count--
 
-    // if 20 seconds have passed (end question)
+    // If 20 seconds have passed (end question)
     }else{
 
         quiz.style.display = "none";
@@ -260,13 +254,13 @@ function renderCounter(){
         // Wait 10 seconds for next question
         setTimeout(function wait(){
 
-            // remove category choice box and start new question
+            // Remove category choice box and start new question
             check();}, 10000);
 
         if(numberQuestion < lastQuestion){
             numberQuestion++;
         }else{
-            // end the quiz and show the score
+            // End the quiz and show the score
             clearInterval(TIMER);
             url =  "/ranking?room=" + '{{ room }}'
             window.location.href = url;
@@ -274,7 +268,7 @@ function renderCounter(){
     }
 }
 
-// checkAnwer, triggered when clicked on answer
+// CheckAnwer, triggered when clicked on answer
 function score(correct_incorrect)
     {
         url = "/finalscores?arg=" + correct_incorrect;
@@ -319,15 +313,6 @@ function checkAnswer(answer){
     hide(1);
 }
 
-// answer is correct
-function answerIsCorrect(){
-    document.getElementById(runningQuestion).style.backgroundColor = "#0f0";
-}
-
-// answer is Wrong
-function answerIsWrong(){
-    document.getElementById(runningQuestion).style.backgroundColor = "#f00";
-}
 
     </script>
 
